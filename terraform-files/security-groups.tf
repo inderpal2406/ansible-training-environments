@@ -44,8 +44,8 @@ resource "aws_security_group" "allow-bastion-ssh" {
     cidr_blocks = ["0.0.0.0/0"]
   }
   tags = {
-    Name = "allow-bastion-ssh"
+    Name      = "allow-bastion-ssh"
     Terraform = "True"
-    Owner = "Vikram Singh"
+    Owner     = "Vikram Singh"
   }
 }
