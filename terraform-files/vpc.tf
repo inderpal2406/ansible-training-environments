@@ -3,8 +3,8 @@
 resource "aws_vpc" "main-vpc" {
   cidr_block           = "10.0.0.0/16"
   instance_tenancy     = "default"
-  enable_dns_support   = false
-  enable_dns_hostnames = false
+  enable_dns_support   = true
+  enable_dns_hostnames = true
   #ipv6_cidr_block = (by default, if we don't specify this attribute, then
   #no ipv6 addresses gets associated)
   tags = {
@@ -23,3 +23,7 @@ resource "aws_vpc" "main-vpc" {
 # allow all incoming and outgoing & internal VPC routing by default.
 # However, we'll leave default SG created. We'll instead create custom SG
 # with required details and associate them with EC2 instances.
+
+# After one day, we saw a problem that default RT doesn't has route to IGW to 
+# send response traffic of SSH session. So, we'll leave default RT as it is.
+# And create 2 RTs, one for public subnet & other for private subnet.
