@@ -33,3 +33,6 @@ override.tf.json
 
 # Include terraform.tfvars as it contains sensitive variable values.
 terraform.tfvars
+
+# Include ssh-keys folder as it contains ssh key pairs.
+ssh-keys
