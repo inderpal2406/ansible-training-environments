@@ -15,5 +15,6 @@ terraform {
     }
     */
     # As it was downloaded due to init command, I manually deleted it from .terraform folder and commented it above.
+    # terraform init has to be run again, as it updated and removed template provider info from .terraform.lock.hcl file.
   }
 }
