@@ -3,7 +3,7 @@
 resource "aws_vpc" "main-vpc" {
   cidr_block           = "10.0.0.0/16"
   instance_tenancy     = "default"
-  enable_dns_support   = false
+  enable_dns_support   = true   # This parameter enables resolution of public DNS entries from public DNS servers.
   enable_dns_hostnames = false
   #ipv6_cidr_block = (by default, if we don't specify this attribute, then
   #no ipv6 addresses gets associated)
