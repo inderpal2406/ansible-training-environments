@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+sudo hostnamectl set-hostname ${ansible_server_hostname}
+sudo echo "${ansible_server_pvt_ip} ${ansible_server_hostname}" >> /etc/hosts
