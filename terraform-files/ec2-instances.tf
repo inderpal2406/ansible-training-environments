@@ -45,7 +45,9 @@ resource "aws_instance" "bastion-server" {
   */
   # Below format of user_data requires template provider which has been archived by Hashicorp.
   # Hashicorp now suggests to use templatefile() or cloudinit provider instead.
-  #user_data = data.template_file.bastion-server-init.rendered
+  /*
+  user_data = data.template_file.bastion-server-init.rendered
+  */
   # Below user_data fails if I split the path & variables in multiple lines.
   # The hostname and hosts entry doesn't get setup.
   /*
