@@ -105,21 +105,3 @@ resource "aws_instance" "ansible-server" {
   }
   user_data = templatefile(".\\template-files\\ansible-server-init.sh.tftpl", { ansible_server_hostname = var.ansible-server-hostname, ansible_server_pvt_ip = var.ansible-server-pvt-ip })
 }
-
-# Test instance.
-
-resource "aws_instance" "test-instance" {
-  ami                         = data.aws_ami.ubuntu.id
-  instance_type               = "t2.micro"
-  key_name                    = aws_key_pair.bastion-server-key.key_name
-  subnet_id                   = aws_subnet.main-vpc-pub-subnet.id
-  associate_public_ip_address = true
-  vpc_security_group_ids      = [aws_security_group.allow-public-ssh.id]
-  private_ip                  = "10.0.0.5"
-  tags = {
-    Name      = "test-server"
-    Terraform = "True"
-    Owner     = "Vikram Singh"
-  }
-  user_data = templatefile(".\\template-files\\test-server-init.sh.tftpl", { request_id = "REQ001", name = "John" })
-}
