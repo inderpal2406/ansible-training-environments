@@ -11,3 +11,15 @@ resource "aws_key_pair" "bastion-server-key" {
     Owner     = "Vikram Singh"
   }
 }
+
+# Key pair for Ansible server.
+
+resource "aws_key_pair" "ansible-server-key" {
+  key_name   = "ansible-server-key"
+  public_key = file(".\\ssh-keys\\ansible-server-key.pub")
+  tags = {
+    Name      = "ansible-server-key"
+    Terraform = "True"
+    Owner     = "Vikram Singh"
+  }
+}
