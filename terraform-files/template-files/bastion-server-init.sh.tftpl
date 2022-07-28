@@ -2,3 +2,4 @@
 sudo hostnamectl set-hostname ${bastion_server_hostname}
 sudo echo "${bastion_server_pvt_ip} ${bastion_server_hostname}" >> /etc/hosts
 sudo echo "${ansible_server_pvt_ip} ${ansible_server_hostname}" >> /etc/hosts
+sudo echo "${squid_proxy_pvt_ip} ${squid_proxy_hostname}" >> /etc/hosts
