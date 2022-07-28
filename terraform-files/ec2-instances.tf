@@ -114,7 +114,7 @@ resource "aws_instance" "squid-proxy" {
   key_name                    = aws_key_pair.ansible-server-key.key_name
   subnet_id                   = aws_subnet.main-vpc-pub-subnet.id
   associate_public_ip_address = true
-  vpc_security_group_ids      = [aws_security_group.allow-bastion-ssh.id]
+  vpc_security_group_ids      = [aws_security_group.allow-bastion-ssh.id, aws_security_group.allow-proxy-traffic.id]
   private_ip                  = var.squid-proxy-pvt-ip
   tenancy                     = "default"
   metadata_options {

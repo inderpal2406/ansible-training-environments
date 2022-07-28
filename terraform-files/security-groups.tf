@@ -49,3 +49,28 @@ resource "aws_security_group" "allow-bastion-ssh" {
     Owner     = "Vikram Singh"
   }
 }
+
+resource "aws_security_group" "allow-proxy-traffic" {
+  name        = "allow-proxy-traffic"
+  description = "Allow incoming traffic on proxy port of squid proxy server."
+  vpc_id      = aws_vpc.main-vpc.id
+  ingress {
+    description = "Allow incoming traffic on proxy port of squid proxy server."
+    from_port   = 3128
+    to_port     = 3128
+    protocol    = "tcp"
+    cidr_blocks = [var.main-vpc-cidr]
+  }
+  egress {
+    description = "Allow all outgoing traffic."
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+  tags = {
+    Name      = "allow-proxy-traffic"
+    Terraform = "True"
+    Owner     = "Vikram Singh"
+  }
+}
