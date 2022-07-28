@@ -62,7 +62,7 @@ resource "aws_instance" "bastion-server" {
   )
   */
   # So, we mention user_data in single line.
-  user_data = templatefile(".\\template-files\\bastion-server-init.sh.tftpl", { bastion_server_hostname = var.bastion-server-hostname, bastion_server_pvt_ip = var.bastion-server-pvt-ip, ansible_server_hostname = var.ansible-server-hostname, ansible_server_pvt_ip = var.ansible-server-pvt-ip })
+  user_data = templatefile(".\\template-files\\bastion-server-init.sh.tftpl", { bastion_server_hostname = var.bastion-server-hostname, bastion_server_pvt_ip = var.bastion-server-pvt-ip, ansible_server_hostname = var.ansible-server-hostname, ansible_server_pvt_ip = var.ansible-server-pvt-ip, squid_proxy_hostname = var.squid-proxy-hostname, squid_proxy_pvt_ip = var.squid-proxy-pvt-ip })
   # Copy private key to ssh to ansible-server from bastion-server.
   provisioner "file" {
     source      = "ssh-keys\\ansible-server-key"
@@ -104,4 +104,27 @@ resource "aws_instance" "ansible-server" {
     Owner     = "Vikram Singh"
   }
   user_data = templatefile(".\\template-files\\ansible-server-init.sh.tftpl", { ansible_server_hostname = var.ansible-server-hostname, ansible_server_pvt_ip = var.ansible-server-pvt-ip })
+}
+
+# Squid proxy server.
+
+resource "aws_instance" "squid-proxy" {
+  ami                         = data.aws_ami.ubuntu.id
+  instance_type               = "t2.micro"
+  key_name                    = aws_key_pair.ansible-server-key.key_name
+  subnet_id                   = aws_subnet.main-vpc-pub-subnet.id
+  associate_public_ip_address = true
+  vpc_security_group_ids      = [aws_security_group.allow-bastion-ssh.id]
+  private_ip                  = var.squid-proxy-pvt-ip
+  tenancy                     = "default"
+  metadata_options {
+    http_endpoint = "enabled"
+    http_tokens   = "required"
+  }
+  tags = {
+    Name      = var.squid-proxy-hostname
+    Terraform = "True"
+    Owner     = "Vikram Singh"
+  }
+  user_data = templatefile(".\\template-files\\squid-proxy-init.sh.tftpl", { squid_proxy_hostname = var.squid-proxy-hostname, squid_proxy_pvt_ip = var.squid-proxy-pvt-ip })
 }
