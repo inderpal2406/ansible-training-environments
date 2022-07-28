@@ -1,7 +1,7 @@
 # Create custom VPC in ap-south-1 region.
 
 resource "aws_vpc" "main-vpc" {
-  cidr_block           = "10.0.0.0/16"
+  cidr_block           = var.main-vpc-cidr
   instance_tenancy     = "default"
   enable_dns_support   = true # This parameter enables resolution of public DNS entries from public DNS servers.
   enable_dns_hostnames = false

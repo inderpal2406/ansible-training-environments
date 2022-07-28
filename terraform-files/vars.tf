@@ -6,6 +6,11 @@ variable "aws_profile" {
   sensitive   = true
 }
 
+variable "main-vpc-cidr" {
+  type        = string
+  description = "CIDR range of main vpc."
+}
+
 variable "public-subnet-cidr" {
   type        = string
   description = "CIDR range of Public Subnet."
