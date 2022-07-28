@@ -35,3 +35,13 @@ variable "ansible-server-hostname" {
   type        = string
   description = "Hostname of Ansible server."
 }
+
+variable "squid-proxy-pvt-ip" {
+  type        = string
+  description = "Private IP address of Squid Proxy server."
+}
+
+variable "squid-proxy-hostname" {
+  type        = string
+  description = "Hostname of Squid proxy server."
+}
