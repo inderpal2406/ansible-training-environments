@@ -1,3 +1,9 @@
 #!/usr/bin/env bash
 sudo hostnamectl set-hostname ${squid_proxy_hostname}
 sudo echo "${squid_proxy_pvt_ip} ${squid_proxy_hostname}" >> /etc/hosts
+sudo apt-get update
+sudo apt-get upgrade -y
+sudo apt-get install squid -y
+sudo cp -p /etc/squid/squid.conf /etc/squid/squid.conf.bkp
+sudo sed -i 's/http_access deny all/http_access allow all/g' /etc/squid/squid.conf
+sudo systemctl restart squid.service
