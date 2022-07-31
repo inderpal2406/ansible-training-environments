@@ -26,13 +26,34 @@ echo "Acquire::https::Proxy \"http://${squid_proxy_hostname}:3128/\";" | sudo te
 #sudo su -
 #source custom_vars.sh  #custom_vars.sh has http_proxy & https_proxy vars defined.
 #apt install python3-pip
+#pip install -U pip	# To upgrade pip if any latest version is available.
 # pip recommends to be run as non root user, but we run it as root as root's profile has proxy vars defined, because of which internet connection works.
 #WARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager. It is recommended to 
 #use a virtual environment instead: https://pip.pypa.io/warnings/venv
-#pip install -U pip	# To upgrade pip if any latest version is available.
-#pip install ansible
-#ansible --version
+# So, to overcome this we setup proxy details in /etc/apt/apt.conf.d/proxy.conf and use pip as non root user in final section.
+#pip install ansible    # as root user.
+#ansible --version      # as root user.
 # In this way ansible is installed as root user using pip.
 # Exiting root user and checking "ansible --version" as another user also works and doesn't ask for sudo rights.
 # After installing pip using apt, we can switch to non-root user and try installing ansible using pip.
 # If it fails, then have http_proxy & https_proxy vars in non-root user's env.
+
+############ Installing ansible on centos #############
+# Due to issue with add-apt-repository command with proxy server, we decided to do it on centos.
+# Official ansible documentation has instructions for centos ansible installation.
+# But centos image had few negative reviews on amazon marketplace.
+# So, switched to redhat as it is similar to centos and thought centos instructions would work for redhat.
+# But the command "sudo yum install epel-release" failed saying "Unable to find match"
+# Also redhat system didn't had any version of python pre-installed.
+# instead of trying further, thought to go with centos.
+# After trying this, it failed to created EC2 instance as the image had to be subscribed first.
+# Now we'll fall back to ubuntu and install using pip in ansible-server resource itself via this init script.
+
+# Install ansible using pip.
+# By default ubuntu has python3 but not pip.
+# As proxy details are their in /etc/apt/apt.conf.d/proxy.conf file, installing pip using apt.
+sudo apt update
+sudo apt upgrade -y
+sudo apt install python3-pip -y
+pip3 install --proxy=http://${squid_proxy_hostname}:3128 -U pip  # Upgrade pip to latest available version. Using https proxy gives SSL error. So, we use http proxy.
+pip3 install --proxy=http://${squid_proxy_hostname}:3128 ansible
