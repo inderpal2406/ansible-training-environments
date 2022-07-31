@@ -12,14 +12,14 @@ echo "Acquire::https::Proxy \"http://${squid_proxy_hostname}:3128/\";" | sudo te
 #export https_proxy="https://squid-proxy:3128"
 # Above env vars were set manually for root user and then add-apt-repository was tried, but it didn't work.
 # Allowing all traffic on proxy server; enabling SSL ports 443, 80; didn't work.
-# Not investing more time, decision is made to try installing on centos system.
+# Not investing more time, decision is made to try installing on redhat system.
 # Otherwise as per official documentation, ansible can be installed on ubuntu as below,
 #sudo apt update
 #sudo apt upgrade -y
 #sudo apt install software-properties-common -y
 #sudo add-apt-repository --yes --update ppa:ansible/ansible
 #sudo apt install ansible
-# If centos also doesn't work, the ansible can be installed using pip.
+# If redhat also doesn't work, the ansible can be installed using pip.
 
 ############ Installing ansible using pip #############
 # python3 is present by default but not pip, on ubuntu server.
