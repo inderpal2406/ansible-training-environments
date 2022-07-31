@@ -1,3 +1,38 @@
 #!/usr/bin/env bash
 sudo hostnamectl set-hostname ${ansible_server_hostname}
 sudo echo "${ansible_server_pvt_ip} ${ansible_server_hostname}" >> /etc/hosts
+sudo echo "${squid_proxy_pvt_ip} ${squid_proxy_hostname}" >> /etc/hosts
+# Setup proxy details for APT to connect to public APT repos via proxy server.
+sudo touch /etc/apt/apt.conf.d/proxy.conf
+echo "Acquire::http::Proxy \"http://${squid_proxy_hostname}:3128/\";" | sudo tee -a /etc/apt/apt.conf.d/proxy.conf
+echo "Acquire::https::Proxy \"http://${squid_proxy_hostname}:3128/\";" | sudo tee -a /etc/apt/apt.conf.d/proxy.conf
+# Above configuration works for apt, apt-get but not for add-apt-respository command.
+# To make add-apt-repository command work, on internet it was said to have proxy details in env vars, as below,
+#export http_proxy="http://squid-proxy:3128"
+#export https_proxy="https://squid-proxy:3128"
+# Above env vars were set manually for root user and then add-apt-repository was tried, but it didn't work.
+# Allowing all traffic on proxy server; enabling SSL ports 443, 80; didn't work.
+# Not investing more time, decision is made to try installing on centos system.
+# Otherwise as per official documentation, ansible can be installed on ubuntu as below,
+#sudo apt update
+#sudo apt upgrade -y
+#sudo apt install software-properties-common -y
+#sudo add-apt-repository --yes --update ppa:ansible/ansible
+#sudo apt install ansible
+# If centos also doesn't work, the ansible can be installed using pip.
+
+############ Installing ansible using pip #############
+# python3 is present by default but not pip, on ubuntu server.
+#sudo su -
+#source custom_vars.sh  #custom_vars.sh has http_proxy & https_proxy vars defined.
+#apt install python3-pip
+# pip recommends to be run as non root user, but we run it as root as root's profile has proxy vars defined, because of which internet connection works.
+#WARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager. It is recommended to 
+#use a virtual environment instead: https://pip.pypa.io/warnings/venv
+#pip install -U pip	# To upgrade pip if any latest version is available.
+#pip install ansible
+#ansible --version
+# In this way ansible is installed as root user using pip.
+# Exiting root user and checking "ansible --version" as another user also works and doesn't ask for sudo rights.
+# After installing pip using apt, we can switch to non-root user and try installing ansible using pip.
+# If it fails, then have http_proxy & https_proxy vars in non-root user's env.
