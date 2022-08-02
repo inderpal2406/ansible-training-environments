@@ -70,3 +70,23 @@ variable "ubuntu11-hostname" {
   type        = string
   description = "Hostname of ubuntu11 server."
 }
+
+variable "redhat10-pvt-ip" {
+  type        = string
+  description = "Private IP address of redhat10 server."
+}
+
+variable "redhat10-hostname" {
+  type        = string
+  description = "Hostname of redhat10 server."
+}
+
+variable "redhat11-pvt-ip" {
+  type        = string
+  description = "Private IP address of redhat11 server."
+}
+
+variable "redhat11-hostname" {
+  type        = string
+  description = "Hostname of redhat11 server."
+}
