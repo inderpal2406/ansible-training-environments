@@ -60,3 +60,13 @@ variable "ubuntu10-hostname" {
   type        = string
   description = "Hostname of ubuntu10 server."
 }
+
+variable "ubuntu11-pvt-ip" {
+  type        = string
+  description = "Private IP address of ubuntu11 server."
+}
+
+variable "ubuntu11-hostname" {
+  type        = string
+  description = "Hostname of ubuntu11 server."
+}
