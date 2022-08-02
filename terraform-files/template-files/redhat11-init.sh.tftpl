@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+sudo hostnamectl set-hostname ${redhat11_hostname}
+echo "${redhat11_pvt_ip} ${redhat11_hostname}" | sudo tee -a /etc/hosts
+echo "${squid_proxy_pvt_ip} ${squid_proxy_hostname}" | sudo tee -a /etc/hosts
+# Setup proxy details for YUM to connect to public YUM repos via proxy server.
+echo "proxy=http://${squid_proxy_hostname}:3128/" | sudo tee -a /etc/yum.conf
