@@ -184,6 +184,52 @@ resource "aws_instance" "ubuntu11" {
   user_data = templatefile(".\\template-files\\ubuntu11-init.sh.tftpl", { ubuntu11_hostname = var.ubuntu11-hostname, ubuntu11_pvt_ip = var.ubuntu11-pvt-ip, squid_proxy_hostname = var.squid-proxy-hostname, squid_proxy_pvt_ip = var.squid-proxy-pvt-ip })
 }
 
+# redhat10 server.
+
+resource "aws_instance" "redhat10" {
+  ami                         = data.aws_ami.redhat.id
+  instance_type               = "t2.micro"
+  key_name                    = aws_key_pair.ansible-server-key.key_name
+  subnet_id                   = aws_subnet.main-vpc-pvt-subnet.id
+  associate_public_ip_address = false
+  vpc_security_group_ids      = [aws_security_group.allow-ansible-ssh.id]
+  private_ip                  = var.redhat10-pvt-ip
+  tenancy                     = "default"
+  metadata_options {
+    http_endpoint = "enabled"
+    http_tokens   = "required"
+  }
+  tags = {
+    Name      = var.redhat10-hostname
+    Terraform = "True"
+    Owner     = "Vikram Singh"
+  }
+  user_data = templatefile(".\\template-files\\redhat10-init.sh.tftpl", { redhat10_hostname = var.redhat10-hostname, redhat10_pvt_ip = var.redhat10-pvt-ip, squid_proxy_hostname = var.squid-proxy-hostname, squid_proxy_pvt_ip = var.squid-proxy-pvt-ip })
+}
+
+# redhat11 server.
+
+resource "aws_instance" "redhat11" {
+  ami                         = data.aws_ami.redhat.id
+  instance_type               = "t2.micro"
+  key_name                    = aws_key_pair.ansible-server-key.key_name
+  subnet_id                   = aws_subnet.main-vpc-pvt-subnet.id
+  associate_public_ip_address = false
+  vpc_security_group_ids      = [aws_security_group.allow-ansible-ssh.id]
+  private_ip                  = var.redhat11-pvt-ip
+  tenancy                     = "default"
+  metadata_options {
+    http_endpoint = "enabled"
+    http_tokens   = "required"
+  }
+  tags = {
+    Name      = var.redhat11-hostname
+    Terraform = "True"
+    Owner     = "Vikram Singh"
+  }
+  user_data = templatefile(".\\template-files\\redhat11-init.sh.tftpl", { redhat11_hostname = var.redhat11-hostname, redhat11_pvt_ip = var.redhat11-pvt-ip, squid_proxy_hostname = var.squid-proxy-hostname, squid_proxy_pvt_ip = var.squid-proxy-pvt-ip })
+}
+
 # test-server created to test using which user is the user_data executed.
 # But no file such as /tmp/whoami.txt got created to get an answer.
 /*
