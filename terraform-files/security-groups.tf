@@ -74,3 +74,23 @@ resource "aws_security_group" "allow-proxy-traffic" {
     Owner     = "Vikram Singh"
   }
 }
+
+resource "aws_security_group" "allow-ansible-ssh" {
+  name        = "allow-ansible-ssh"
+  description = "Allow SSH traffic from Ansible server."
+  vpc_id      = aws_vpc.main-vpc.id
+  ingress {
+    description = "Allow incoming SSH traffic from Ansible server."
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = ["${aws_instance.ansible-server.private_ip}/32"]
+  }
+  egress {
+    description = "Allow all outgoing traffic."
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+}
