@@ -50,3 +50,13 @@ variable "squid-proxy-hostname" {
   type        = string
   description = "Hostname of Squid proxy server."
 }
+
+variable "ubuntu10-pvt-ip" {
+  type        = string
+  description = "Private IP address of ubuntu10 server."
+}
+
+variable "ubuntu10-hostname" {
+  type        = string
+  description = "Hostname of ubuntu10 server."
+}
