@@ -27,7 +27,7 @@ data "template_file" "bastion-server-init" {
 }
 */
 
-# RedHat Linux AMI - ami-05c8ca4485f8b138a for ansible-server but not used.
+# RedHat Linux AMI - ami-05c8ca4485f8b138a for target hosts.
 
 data "aws_ami" "redhat" {
   most_recent = true
