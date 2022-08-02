@@ -1,3 +1,8 @@
 #!/usr/bin/env bash
 sudo hostnamectl set-hostname ${ubuntu10_hostname}
 echo "${ubuntu10_pvt_ip} ${ubuntu10_hostname}" | sudo tee -a /etc/hosts
+echo "${squid_proxy_pvt_ip} ${squid_proxy_hostname}" | sudo tee -a /etc/hosts
+# Setup proxy details for APT to connect to public APT repos via proxy server.
+sudo touch /etc/apt/apt.conf.d/proxy.conf
+echo "Acquire::http::Proxy \"http://${squid_proxy_hostname}:3128/\";" | sudo tee -a /etc/apt/apt.conf.d/proxy.conf
+echo "Acquire::https::Proxy \"http://${squid_proxy_hostname}:3128/\";" | sudo tee -a /etc/apt/apt.conf.d/proxy.conf
