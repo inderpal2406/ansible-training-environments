@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+sudo hostnamectl set-hostname ${ubuntu10_hostname}
+echo "${ubuntu10_pvt_ip} ${ubuntu10_hostname}" | sudo tee -a /etc/hosts
