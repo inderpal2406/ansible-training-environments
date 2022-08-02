@@ -140,6 +140,15 @@ resource "aws_instance" "ubuntu10" {
   vpc_security_group_ids      = [aws_security_group.allow-ansible-ssh.id]
   private_ip                  = var.ubuntu10-pvt-ip
   tenancy                     = "default"
+  # Root EBS volume cannot be < 8 GB as the size of snapshot it is created from, is of 8 GB.
+  # Idea was to reduce total EBS storage size and have < 30 GB, which is free tire limit.
+  /*
+  root_block_device {
+    delete_on_termination = true
+    volume_size           = 4
+    volume_type           = "gp2"
+  }
+  */
   metadata_options {
     http_endpoint = "enabled"
     http_tokens   = "required"
