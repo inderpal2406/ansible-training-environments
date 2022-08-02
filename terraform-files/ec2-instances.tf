@@ -147,7 +147,7 @@ resource "aws_instance" "ubuntu10" {
     Terraform = "True"
     Owner     = "Vikram Singh"
   }
-  user_data = templatefile(".\\template-files\\ubuntu10-init.sh.tftpl", { ubuntu10_hostname = var.ubuntu10-hostname, ubuntu10_pvt_ip = var.ubuntu10-pvt-ip })
+  user_data = templatefile(".\\template-files\\ubuntu10-init.sh.tftpl", { ubuntu10_hostname = var.ubuntu10-hostname, ubuntu10_pvt_ip = var.ubuntu10-pvt-ip, squid_proxy_hostname = var.squid-proxy-hostname, squid_proxy_pvt_ip = var.squid-proxy-pvt-ip })
 }
 
 # test-server created to test using which user is the user_data executed.
