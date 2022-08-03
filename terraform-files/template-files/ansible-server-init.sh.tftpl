@@ -11,6 +11,7 @@ echo "Acquire::https::Proxy \"http://${squid_proxy_hostname}:3128/\";" | sudo te
 #export http_proxy="http://squid-proxy:3128"
 #export https_proxy="https://squid-proxy:3128"
 # Above env vars were set manually for root user and then add-apt-repository was tried, but it didn't work.
+# Reference of add-apt-repository to work with proxy: https://fabianlee.org/2020/11/16/ubuntu-using-add-apt-repository-with-a-proxy/
 # Allowing all traffic on proxy server; enabling SSL ports 443, 80; didn't work.
 # Not investing more time, decision is made to try installing on redhat system.
 # Otherwise as per official documentation, ansible can be installed on ubuntu as below,
