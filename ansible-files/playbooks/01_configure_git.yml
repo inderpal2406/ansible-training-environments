@@ -1,0 +1,15 @@
+---
+- name: Ensure git is installed and configured for default user of EC2 ami.
+  gather_facts: false
+  hosts: aws
+  tasks:
+    - name: Ensure git package is of latest version.
+      become: true
+      package:
+        name: "git"
+        state: "latest"
+    - name: Ensure git config parameters are setup by copying .gitconfig from master.gitconfig.
+      copy:
+        src: "../files/master.gitconfig"
+        dest: "~/.gitconfig"
+

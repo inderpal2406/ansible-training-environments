@@ -1,0 +1,31 @@
+[aws:children]
+ubuntu
+redhat
+controller
+
+[aws:vars]
+ansible_port = 22
+
+[ubuntu]
+ubuntu10
+ubuntu11
+
+[ubuntu:vars]
+ansible_user = ubuntu
+ansible_connection = ssh
+
+[redhat]
+redhat10
+redhat11
+
+[redhat:vars]
+ansible_user = ec2-user
+ansible_connection = ssh
+
+[controller]
+localhost
+
+[controller:vars]
+ansible_user = ubuntu
+ansible_connection = local
+

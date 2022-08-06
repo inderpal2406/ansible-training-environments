@@ -1,0 +1,9 @@
+---
+# Playbook to test connectivity to all hosts via ansible ping.
+- name: Ensure ansible can connect to all hosts & verify usable python.
+  gather_facts: false
+  hosts: all
+  tasks:
+    - name: Ping all hosts & verify usable python.
+      ping:
+

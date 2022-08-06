@@ -1,0 +1,7 @@
+[http]
+	proxy = http://squid-proxy:3128/
+[https]
+	proxy = http://squid-proxy:3128/
+[user]
+	name = Inderpal Singh
+	email = inderpal2406@gmail.com

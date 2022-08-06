@@ -1,0 +1,43 @@
+---
+# Playbook to install utility packages.
+- name: Ensure latest versions of all utility packages are installed on all AWS machines.
+  gather_facts: false
+  hosts: aws
+  become: true
+  tasks:
+    # jq package worked without update cache of default pkg manager.
+    - name: Ensure jq package is installed & is of latest version.
+      package:
+        name: "jq"
+        state: "latest"
+    # But no matching pkg is found for bat for below task.
+    # However, when i manually update cache of pkg manager, bat pkg is located by below task.
+    # Since, package module doesn't have option to update cache, we'll use apt module for ubuntu.
+#    - name: Ensure bat package is installed & is of latest version.
+#      package:
+#        name: "bat"
+#        state: "latest"
+    # hence, we have separate plays to install bat for ubuntu & redhat as it requires different modules.
+
+- name: Ensure latest versions of all utility packages are installed on all ubuntu AWS machines.
+  gather_facts: false
+  hosts: ubuntu controller
+  become: true
+  tasks:
+    - name: Ensure package cache is updated and bat package is installed & is of latest version.
+      apt:
+        name: "bat"
+        state: "latest"
+        update_cache: "yes"
+    # Since, bat gets installed as batcat due to name clash with other pkg, we create sym link.
+    # More info on https://github.com/sharkdp/bat#on-ubuntu-using-apt
+    - name: Ensure bat soft link is created & pointing to batcat executable.
+      file:
+        src: "/usr/bin/batcat"
+        dest: "/usr/bin/bat"
+        state: "link"
+
+# bat cannot be installed on redhat using yum.
+# Separate process needs to be followed as per https://github.com/sharkdp/bat/issues/32501~
+# We'll look into this later.
+
