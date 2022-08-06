@@ -1,11 +1,21 @@
 #!/usr/bin/env bash
-sudo hostnamectl set-hostname ${ansible_server_hostname}
-sudo echo "${ansible_server_pvt_ip} ${ansible_server_hostname}" >> /etc/hosts
-sudo echo "${squid_proxy_pvt_ip} ${squid_proxy_hostname}" >> /etc/hosts
+# User data is executed as root user as per AWS official documentation. So, no need to use sudo.
+# From AWS documentation, Scripts entered as user data are run as the root user, so do not use the 
+# sudo command in the script. Remember that any files you create will be owned by root; if you need 
+# non-root users to have file access, you should modify the permissions accordingly in the script. 
+# Also, because the script is not run interactively, you cannot include commands that require user 
+# feedback (such as yum update without the -y flag).
+hostnamectl set-hostname ${ansible_server_hostname}
+echo "${ansible_server_pvt_ip} ${ansible_server_hostname}" >> /etc/hosts
+echo "${squid_proxy_pvt_ip} ${squid_proxy_hostname}" >> /etc/hosts
+echo "${ubuntu10_pvt_ip} ${ubuntu10_hostname}" >> /etc/hosts
+echo "${ubuntu11_pvt_ip} ${ubuntu11_hostname}" >> /etc/hosts
+echo "${redhat10_pvt_ip} ${redhat10_hostname}" >> /etc/hosts
+echo "${redhat11_pvt_ip} ${redhat11_hostname}" >> /etc/hosts
 # Setup proxy details for APT to connect to public APT repos via proxy server.
-sudo touch /etc/apt/apt.conf.d/proxy.conf
-echo "Acquire::http::Proxy \"http://${squid_proxy_hostname}:3128/\";" | sudo tee -a /etc/apt/apt.conf.d/proxy.conf
-echo "Acquire::https::Proxy \"http://${squid_proxy_hostname}:3128/\";" | sudo tee -a /etc/apt/apt.conf.d/proxy.conf
+touch /etc/apt/apt.conf.d/proxy.conf
+echo "Acquire::http::Proxy \"http://${squid_proxy_hostname}:3128/\";" | tee -a /etc/apt/apt.conf.d/proxy.conf
+echo "Acquire::https::Proxy \"http://${squid_proxy_hostname}:3128/\";" | tee -a /etc/apt/apt.conf.d/proxy.conf
 # Above configuration works for apt, apt-get but not for add-apt-respository command.
 # To make add-apt-repository command work, on internet it was said to have proxy details in env vars, as below,
 #export http_proxy="http://squid-proxy:3128"
@@ -38,6 +48,8 @@ echo "Acquire::https::Proxy \"http://${squid_proxy_hostname}:3128/\";" | sudo te
 # Exiting root user and checking "ansible --version" as another user also works and doesn't ask for sudo rights.
 # After installing pip using apt, we can switch to non-root user and try installing ansible using pip.
 # If it fails, then have http_proxy & https_proxy vars in non-root user's env.
+# user data is run as root user by default and there maybe no option to switch user in between the user data.
+# So, for now we are installing software using pip via root user only, though pip gives warning to not run pip as root user.
 
 ############ Installing ansible on centos #############
 # Due to issue with add-apt-repository command with proxy server, we decided to do it on centos.
@@ -53,8 +65,31 @@ echo "Acquire::https::Proxy \"http://${squid_proxy_hostname}:3128/\";" | sudo te
 # Install ansible using pip.
 # By default ubuntu has python3 but not pip.
 # As proxy details are their in /etc/apt/apt.conf.d/proxy.conf file, installing pip using apt.
-sudo apt update
-sudo apt upgrade -y
-sudo apt install python3-pip -y
+apt update
+apt upgrade -y
+apt install python3-pip -y
 pip3 install --proxy=http://${squid_proxy_hostname}:3128 -U pip  # Upgrade pip to latest available version. Using https proxy gives SSL error. So, we use http proxy.
 pip3 install --proxy=http://${squid_proxy_hostname}:3128 ansible
+
+# Clone anisble playbooks repository.
+#cd && mkdir git-repos  # This didn't work, no git-repos dir was created.
+#cd git-repos   # If the dir was not created then this command should have failed, but terraform/aws proceeded & cloned the repo in /
+# So, we make changes now as below,
+mkdir -p /home/ubuntu/git-repos/ansible-training-environment
+#cd /home/ubuntu/git-repos/  # In next run, git-repos was created but nothing got cloned in it, maybe bcoz cd didn't work and git clone after cd was not executed due to cd failure.
+# To make git clone happen through proxy server.
+#git config --global http.proxy "http://${squid_proxy_hostname}:3128/"   # Not sure, but this command didn't work & no /root/.gitconfig file was created.
+#git config --global https.proxy "https://${squid_proxy_hostname}:3128/"
+#touch /root/.gitconfig
+##echo "http.proxy=http://${squid_proxy_hostname}:3128/" >> /root/.gitconfig     # This doesn't create record in .gitconfig file in required format.
+##echo "https.proxy=https://${squid_proxy_hostname}:3128/" >> /root/.gitconfig   # So, git cannot read the .gitconfig file.
+#cat <<EOT >> /root/.gitconfig
+#[http]
+#    proxy = http://${squid_proxy_hostname}:3128/
+#[https]
+#    proxy = http://${squid_proxy_hostname}:3128/
+#EOT
+## With this .gitconfig get initialized properly. But still git clone didn't work, but the permissions we re changed as per last command.
+## Decided not to invest more time into this and manually clone the repo on ansible server.
+#git clone https://github.com/inderpal2406/ansible-training-environment.git /home/ubuntu/git-repos/ansible-training-environment/
+chown -R ubuntu:ubuntu /home/ubuntu/git-repos/
