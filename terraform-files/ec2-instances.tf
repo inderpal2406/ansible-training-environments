@@ -103,7 +103,7 @@ resource "aws_instance" "ansible-server" {
     Terraform = "True"
     Owner     = "Vikram Singh"
   }
-  user_data = templatefile(".\\template-files\\ansible-server-init.sh.tftpl", { ansible_server_hostname = var.ansible-server-hostname, ansible_server_pvt_ip = var.ansible-server-pvt-ip, squid_proxy_hostname = var.squid-proxy-hostname, squid_proxy_pvt_ip = var.squid-proxy-pvt-ip })
+  user_data = templatefile(".\\template-files\\ansible-server-init.sh.tftpl", { ansible_server_hostname = var.ansible-server-hostname, ansible_server_pvt_ip = var.ansible-server-pvt-ip, squid_proxy_hostname = var.squid-proxy-hostname, squid_proxy_pvt_ip = var.squid-proxy-pvt-ip, ubuntu10_hostname = var.ubuntu10-hostname, ubuntu10_pvt_ip = var.ubuntu10-pvt-ip, ubuntu11_hostname = var.ubuntu11-hostname, ubuntu11_pvt_ip = var.ubuntu11-pvt-ip, redhat10_hostname = var.redhat10-hostname, redhat10_pvt_ip = var.redhat10-pvt-ip, redhat11_hostname = var.redhat11-hostname, redhat11_pvt_ip = var.redhat11-pvt-ip })
 }
 
 # Squid proxy server.
