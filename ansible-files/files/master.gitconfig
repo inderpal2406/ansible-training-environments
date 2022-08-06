@@ -5,3 +5,9 @@
 [user]
 	name = Inderpal Singh
 	email = inderpal2406@gmail.com
+# Below will set merge strategy on pulling origin main.
+# rebase = false means merge changes from remote branch to local branch.
+# rebase = true means follow rebase strategy
+# pull.ff = true means fast-forward merge strategy only.
+[pull]
+	rebase = false
