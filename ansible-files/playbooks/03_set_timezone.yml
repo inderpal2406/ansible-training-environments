@@ -1,0 +1,36 @@
+---
+# Playbook to set timezone to IST time on ubuntu AWS servers.
+- name: Ensure timezone is set to IST time on ubuntu AWS servers.
+  gather_facts: false
+  hosts: ubuntu controller
+  become: true
+  tasks:
+    - name: Ensure timezone is set to Asia/Calcutta on ubuntu AWS servers.
+      timezone:
+        name: "Asia/Calcutta"
+      # Restart cron service whenever timezone is changed.
+      notify:
+        - Restart cron service
+  handlers:
+    - name: Restart cron service
+      service: 
+        # cron service is in ubuntu & crond in redhat. Hence we use separate tasks for now.
+        name: "cron"
+        state: "restarted"
+
+- name: Ensure timezone is set to IST time on redhat AWS servers.
+  gather_facts: false
+  hosts: redhat
+  become: true
+  tasks:
+    - name: Ensure timezone is set to Asia/Calcutta on redhat AWS servers.
+      timezone:
+        name: "Asia/Calcutta"
+      notify: Restart crond service
+        - Restart crond service
+  handlers:
+    - name: Restart crond service
+      service:
+        name: "crond"
+        state: "restarted"
+  
