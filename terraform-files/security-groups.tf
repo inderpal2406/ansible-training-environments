@@ -34,7 +34,7 @@ resource "aws_security_group" "allow-bastion-ssh" {
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
-    cidr_blocks = ["${aws_instance.bastion-server.private_ip}/32"]
+    cidr_blocks = ["${var.bastion-server-pvt-ip}/32"]
   }
   egress {
     description = "Allow all outgoing traffic."
@@ -84,7 +84,7 @@ resource "aws_security_group" "allow-ansible-ssh" {
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
-    cidr_blocks = ["${aws_instance.ansible-server.private_ip}/32"]
+    cidr_blocks = ["${var.ansible-server-pvt-ip}/32"]
   }
   egress {
     description = "Allow all outgoing traffic."
