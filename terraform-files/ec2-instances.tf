@@ -19,7 +19,7 @@ resource "aws_instance" "bastion-server" {
   key_name                    = aws_key_pair.bastion-server-key.key_name
   subnet_id                   = aws_subnet.main-vpc-pub-subnet.id
   associate_public_ip_address = true
-  vpc_security_group_ids      = [aws_security_group.allow-public-ssh.id]
+  vpc_security_group_ids      = [aws_security_group.allow-public-ssh.id, aws_security_group.allow-ansible-ssh.id]
   private_ip                  = var.bastion-server-pvt-ip
   tenancy                     = "default" # shared.
   metadata_options {
@@ -68,11 +68,17 @@ resource "aws_instance" "bastion-server" {
     source      = "ssh-keys\\ansible-server-key"
     destination = "/tmp/id_rsa"
   }
+  provisioner "file" {
+    source      = "ssh-keys\\bastion-server-key"
+    destination = "/tmp/bastion-server-key"
+  }
   # ~/.ssh directory already exists, so we don't create it in remote-exec.
   provisioner "remote-exec" {
     inline = [
       "mv /tmp/id_rsa ~/.ssh/",
-      "chmod 600 ~/.ssh/id_rsa"
+      "chmod 600 ~/.ssh/id_rsa",
+      "mv /tmp/bastion-server-key ~/.ssh/",
+      "chmod 600 ~/.ssh/bastion-server-key"
     ]
   }
   connection {
@@ -103,7 +109,7 @@ resource "aws_instance" "ansible-server" {
     Terraform = "True"
     Owner     = "Vikram Singh"
   }
-  user_data = templatefile(".\\template-files\\ansible-server-init.sh.tftpl", { ansible_server_hostname = var.ansible-server-hostname, ansible_server_pvt_ip = var.ansible-server-pvt-ip, squid_proxy_hostname = var.squid-proxy-hostname, squid_proxy_pvt_ip = var.squid-proxy-pvt-ip, ubuntu10_hostname = var.ubuntu10-hostname, ubuntu10_pvt_ip = var.ubuntu10-pvt-ip, ubuntu11_hostname = var.ubuntu11-hostname, ubuntu11_pvt_ip = var.ubuntu11-pvt-ip, redhat10_hostname = var.redhat10-hostname, redhat10_pvt_ip = var.redhat10-pvt-ip, redhat11_hostname = var.redhat11-hostname, redhat11_pvt_ip = var.redhat11-pvt-ip })
+  user_data = templatefile(".\\template-files\\ansible-server-init.sh.tftpl", { ansible_server_hostname = var.ansible-server-hostname, ansible_server_pvt_ip = var.ansible-server-pvt-ip, squid_proxy_hostname = var.squid-proxy-hostname, squid_proxy_pvt_ip = var.squid-proxy-pvt-ip, bastion_server_hostname = var.bastion-server-hostname, bastion_server_pvt_ip = var.bastion-server-pvt-ip, ubuntu10_hostname = var.ubuntu10-hostname, ubuntu10_pvt_ip = var.ubuntu10-pvt-ip, ubuntu11_hostname = var.ubuntu11-hostname, ubuntu11_pvt_ip = var.ubuntu11-pvt-ip, redhat10_hostname = var.redhat10-hostname, redhat10_pvt_ip = var.redhat10-pvt-ip, redhat11_hostname = var.redhat11-hostname, redhat11_pvt_ip = var.redhat11-pvt-ip })
 }
 
 # Squid proxy server.
@@ -114,7 +120,7 @@ resource "aws_instance" "squid-proxy" {
   key_name                    = aws_key_pair.ansible-server-key.key_name
   subnet_id                   = aws_subnet.main-vpc-pub-subnet.id
   associate_public_ip_address = true
-  vpc_security_group_ids      = [aws_security_group.allow-bastion-ssh.id, aws_security_group.allow-proxy-traffic.id]
+  vpc_security_group_ids      = [aws_security_group.allow-bastion-ssh.id, aws_security_group.allow-proxy-traffic.id, aws_security_group.allow-ansible-ssh.id]
   private_ip                  = var.squid-proxy-pvt-ip
   tenancy                     = "default"
   metadata_options {
