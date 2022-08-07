@@ -1,0 +1,13 @@
+---
+# Playbook to setup message of the day on the servers.
+- name: Ensure message of the day is setup on all AWS servers.
+  gather_facts: false
+  hosts: aws
+  become: true
+  tasks:
+    - name: Ensure server-motd is copied as /etc/motd file.
+      copy:
+        src: "../files/server-motd"
+        dest: "/etc/motd"
+      # Permissions are set us 644 for root:root by this task.
+      # These permissions are same as normal, so no permissions/owner attributes used.
