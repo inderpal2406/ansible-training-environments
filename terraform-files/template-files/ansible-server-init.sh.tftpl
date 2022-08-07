@@ -8,6 +8,7 @@
 hostnamectl set-hostname ${ansible_server_hostname}
 echo "${ansible_server_pvt_ip} ${ansible_server_hostname}" >> /etc/hosts
 echo "${squid_proxy_pvt_ip} ${squid_proxy_hostname}" >> /etc/hosts
+echo "${bastion_server_pvt_ip} ${bastion_server_hostname}" >> /etc/hosts
 echo "${ubuntu10_pvt_ip} ${ubuntu10_hostname}" >> /etc/hosts
 echo "${ubuntu11_pvt_ip} ${ubuntu11_hostname}" >> /etc/hosts
 echo "${redhat10_pvt_ip} ${redhat10_hostname}" >> /etc/hosts
