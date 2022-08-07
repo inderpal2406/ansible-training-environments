@@ -1,7 +1,7 @@
 ---
 - name: Ensure git is installed and configured for default user of EC2 ami.
   gather_facts: false
-  hosts: aws
+  hosts: pvthosts
   tasks:
     - name: Ensure git package is of latest version.
       become: true

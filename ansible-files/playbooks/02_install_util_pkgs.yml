@@ -1,8 +1,8 @@
 ---
 # Playbook to install utility packages.
-- name: Ensure latest versions of all utility packages are installed on all AWS machines.
+- name: Ensure latest versions of all utility packages are installed on all pvt subnet machines.
   gather_facts: false
-  hosts: aws
+  hosts: pvthosts
   become: true
   tasks:
     # jq package worked without update cache of default pkg manager.
@@ -21,7 +21,7 @@
 
 - name: Ensure latest versions of all utility packages are installed on all ubuntu AWS machines.
   gather_facts: false
-  hosts: ubuntu controller
+  hosts: pubhosts ubuntu controller
   become: true
   tasks:
     - name: Ensure package cache is updated and bat package is installed & is of latest version.
