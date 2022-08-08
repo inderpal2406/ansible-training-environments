@@ -1,0 +1,49 @@
+---
+# Playbook to create required groups & users on the servers.
+- name: Play to create admin group and users on all servers.
+  gather_facts: false
+  hosts: aws
+  become: true
+  tasks:
+    - name: Ensure sysadmin group is present.
+      group:
+        name: "sysadmin"
+        state: "present"
+    - name: Ensure ajay user is present & added to sysadmin group.
+      user:
+        name: "ajay"
+        comment: "Ajay Alur - DevOps Team"
+        create_home: "yes"
+        groups: "sysadmin"
+        append: "yes"
+        home: "/home/ajay"
+        password: "$6$C10tD76vsQvnqVRz$EOM09Xh6w1ampJA4m7kQIOtQEq5Zye0yd/xQWIB7kpDEpVWYymj35EpqjsrHz1ghA2V8em5GasRnkPypIjw.t0"
+        shell: "/bin/bash"
+        state: "present"
+    - name: Ensure vijay user is present & added to sysadmin group.
+      user:
+        name: "vijay"
+        comment: "Vijay Tyagi - DevOps Team"
+        create_home: "yes"
+        groups: "sysadmin"
+        append: "yes"
+        home: "/home/vijay"
+        password: "$6$kUZaqKzoMV4pRCGy$3n.wZiz4rW5faQFM6qFyqGBW9H4wk7HxyakSI7KfLnDZVnZ.lvoVGRGeT0E/hGS5wKn6xbMLqoNwGzxhNG2UH0"
+        shell: "/bin/bash"
+        state: "present"
+    - name: Ensure pooja user is present & added to sysadmin group.
+      user:
+        name: "pooja"
+        comment: "Pooja Kumar - DevOps Team"
+        create_home: "yes"
+        groups: "sysadmin"
+        append: "yes"
+        home: "/home/pooja"
+        password: "$6$xALKP6VRrVqGUXne$0jMCVBadi.i2EzxA/u4XDp3A1P6krniOEGkUoWRtg/wXku4WZWr9hXASOdcsIquH2ixJhJ.I681qVyHjCY.Lo."
+        shell: "/bin/bash"
+        state: "present"
+
+# See how sysadmin group can be given sudo privileges with password authentication.
+# See how normal developer & tester accounts can be created on pvt subnet machines and not on ansible, squid servers but yes on bastion.
+# See bastion is allowed to ssh on port 22 to all pvt subnet hosts.
+
