@@ -1,11 +1,12 @@
 ---
 # Playbook to install utility packages.
-- name: Ensure latest versions of all utility packages are installed on all pvt subnet machines.
+- name: Ensure latest versions of utility packages are installed on all pvt subnet machines.
   gather_facts: false
   hosts: pvthosts
   become: true
   tasks:
     # jq package worked without update cache of default pkg manager.
+    # package module can only be used if the package name is same in ubuntu & redhat repositories.
     - name: Ensure jq package is installed & is of latest version.
       package:
         name: "jq"
@@ -19,7 +20,7 @@
 #        state: "latest"
     # hence, we have separate plays to install bat for ubuntu & redhat as it requires different modules.
 
-- name: Ensure latest versions of all utility packages are installed on all ubuntu AWS machines.
+- name: Ensure latest versions of utility packages are installed on all ubuntu AWS machines.
   gather_facts: false
   hosts: pubhosts ubuntu controller
   become: true
@@ -36,8 +37,24 @@
         src: "/usr/bin/batcat"
         dest: "/usr/bin/bat"
         state: "link"
+    # Install whois to get whois and mkpasswd binaries.
+    - name: Ensure whois package is installed & is of latest version.
+      apt:
+        name: "whois"
+        state: "latest"
 
 # bat cannot be installed on redhat using yum.
 # Separate process needs to be followed as per https://github.com/sharkdp/bat/issues/32501~
 # We'll look into this later.
+
+- name: Ensure latest versions of utility packages are installed on all redhat AWS machines.
+  gather_facts: false
+  hosts: redhat
+  become: true
+  tasks:
+    # install expect to get mkpasswd & other binaries.
+    - name: Ensure expect package is installed & is of latest version.
+      yum:
+        name: "expect"
+        state: "latest"
 
