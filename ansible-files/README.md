@@ -4,3 +4,8 @@
 - Ensures batcat is latest & symlink created for bat, on all ubuntu machines in private & public subnet.
 - Ensure timezone is IST & cron service restarted on timezone change in all hosts.
 - Ensure motd is setup on all AWS hosts.
+- Ensure whois package is installed on all ubuntu hosts to get the whois & mkpasswd binary.
+- mkpasswd binary is used to create hashed passwords.
+- Ensure expect package is installed on all redhat hosts to get the mkpasswd binary.
+- Ensure sysamdin group is created on all hosts.
+- Ensure 3 users of DevOps team are created on all hosts and added to sysadmin group (secondary group for these users).
