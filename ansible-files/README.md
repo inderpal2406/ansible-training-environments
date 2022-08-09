@@ -8,4 +8,8 @@
 - mkpasswd binary is used to create hashed passwords.
 - Ensure expect package is installed on all redhat hosts to get the mkpasswd binary.
 - Ensure sysamdin group is created on all hosts.
+- Ensure sysadmin group has sudo privileges with required password authentication for sudo on all servers.
 - Ensure 3 users of DevOps team are created on all hosts and added to sysadmin group (secondary group for these users).
+- Ensure dev & tester groups are created on bastion & private subnet hosts (except ansible server).
+- No special permission is given to dev & tester groups in sudoers file. These are just normally created.
+- Ensure 4 users are created and 2 each are given to dev & tester groups.
