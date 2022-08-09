@@ -1,6 +1,6 @@
 ---
 # Playbook to create required groups & users on the servers.
-- name: Play to create admin group and users on all servers.
+- name: Play to create admin group and users on all servers with sudo privileges.
   gather_facts: false
   hosts: aws
   become: true
@@ -8,6 +8,27 @@
     - name: Ensure sysadmin group is present.
       group:
         name: "sysadmin"
+        state: "present"
+#    # Below task works properly, but lineinfile deals with single line only.
+#    # So we user blockinfile to deal with multiple lines.
+#    - name: Ensure sysadmin group has sudo rights with password authentication.
+#      lineinfile:
+#        path: "/etc/sudoers"
+#        backup: "yes"
+#        #regexp: "^%sudo" # If we specify this, then it'll replace this line with %sysadmin line.
+#        insertafter: "^%sudo"
+#        line: "%sysadmin ALL=(ALL:ALL) ALL"
+#        state: "present"
+    - name: Ensure sysadmin group has sudo rights with password authentication.
+      blockinfile:
+        path: "/etc/sudoers"
+        backup: "yes"
+        insertafter: "^%sudo"
+        # putting "" in block lines will insert them with "" into the file. Hence, we exclude "" in block lines.
+        # use of custom markers need to be done carefully as ansible uses these markers to achieve idempotence in subsequent runs.
+        block: |
+          #Allow members of group sysadmin to execute any command with password authentication.
+          %sysadmin ALL=(ALL:ALL) ALL
         state: "present"
     - name: Ensure ajay user is present & added to sysadmin group.
       user:
@@ -42,6 +63,64 @@
         password: "$6$xALKP6VRrVqGUXne$0jMCVBadi.i2EzxA/u4XDp3A1P6krniOEGkUoWRtg/wXku4WZWr9hXASOdcsIquH2ixJhJ.I681qVyHjCY.Lo."
         shell: "/bin/bash"
         state: "present"
+
+- name: Play to create dev & tester group and users on ubuntu & redhat servers in pvt subnet except ansible server & on bastion.
+  gather_facts: false
+  hosts: ubuntu redhat bastion
+  become: true
+  tasks:
+    - name: Ensure dev group is present.
+      group:
+        name: "dev"
+        state: "present"
+    - name: Ensure tester group is present.
+      group:
+        name: "tester"
+        state: "present"
+    - name: Ensure john user is present & added to dev group.
+      user:
+        name: "john"
+        state: "present"
+        comment: "John Taylor - DotNet Dev Team"
+        groups: "dev"
+        append: "yes"
+        create_home: "yes"
+        home: "/home/john"
+        shell: "/bin/bash"
+        password: "$6$DtWEhlOX6bVAXcz2$H15sPFBBrT7X9Q4EyWa.cf6w07YoU9R6F4s2kdySf8GWDyIGz47ZpTyx9CCXfXmBgQpoPoCh/TVl1JU5zCgjQ1"
+    - name: Ensure milind user is present & added to dev group.
+      user:
+        name: "milind"
+        state: "present"
+        comment: "Milind Wakhare - DotNet Dev Team"
+        groups: "dev"
+        append: "yes"
+        create_home: "yes"
+        home: "/home/milind"
+        shell: "/bin/bash"
+        password: "$6$kqQRdFSn6lkRk2nS$Q.K4pUdvTIuoaI6J3ZfGz2USzpTrU5t.oyd4vBUi5v7o2oJQ/ZikLahZgXBWi7fZFgEsdYXTLzTOKzONrVl6w0"
+    - name: Ensure julie user is present & added to tester group.
+      user:
+        name: "julie"
+        state: "present"
+        comment: "Julie Sharma - Automation Test Team"
+        groups: "tester"
+        append: "yes"
+        create_home: "yes"
+        home: "/home/julie"
+        shell: "/bin/bash"
+        password: "$6$lq7NsTZ/Oq3hZjNa$lYsViP/9cuxckaq5uDQefVWNc9XQM5MUax907owKcNnUMHNdHf3Yf76bvn9t92qUkZtkeCQff22Ar9ic/5iVO1"
+    - name: Ensure nancy user is present & added to tester group.
+      user:
+        name: "nancy"
+        state: "present"
+        comment: "Nancy Pellosi - Automation Test Team"
+        groups: "tester"
+        append: "yes"
+        create_home: "yes"
+        home: "/home/nancy"
+        shell: "/bin/bash"
+        password: "$6$Qcg4jM7CUkwgyjOv$fX4CliajY4y9DPvAoujXgwDspaF7Ivq5x8fBgK7qXSpvFLf4CIcNJJ4gfi9AuwijU/PfGqu3410HbLIBTCiNI."
 
 # See how sysadmin group can be given sudo privileges with password authentication.
 # See how normal developer & tester accounts can be created on pvt subnet machines and not on ansible, squid servers but yes on bastion.
