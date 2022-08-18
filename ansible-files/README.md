@@ -13,3 +13,4 @@
 - Ensure dev & tester groups are created on bastion & private subnet hosts (except ansible server).
 - No special permission is given to dev & tester groups in sudoers file. These are just normally created.
 - Ensure 4 users are created and 2 each are given to dev & tester groups.
+- Ensure /etc/ssh/sshd_config file has the parameter "PasswordAuthentication" set to "yes" on all hosts, to enable users to ssh to hosts using their respective passwords.
