@@ -62,7 +62,7 @@ resource "aws_instance" "bastion-server" {
   )
   */
   # So, we mention user_data in single line.
-  user_data = templatefile(".\\template-files\\bastion-server-init.sh.tftpl", { bastion_server_hostname = var.bastion-server-hostname, bastion_server_pvt_ip = var.bastion-server-pvt-ip, ansible_server_hostname = var.ansible-server-hostname, ansible_server_pvt_ip = var.ansible-server-pvt-ip, squid_proxy_hostname = var.squid-proxy-hostname, squid_proxy_pvt_ip = var.squid-proxy-pvt-ip })
+  user_data = templatefile(".\\template-files\\bastion-server-init.sh.tftpl", { bastion_server_hostname = var.bastion-server-hostname, bastion_server_pvt_ip = var.bastion-server-pvt-ip, ansible_server_hostname = var.ansible-server-hostname, ansible_server_pvt_ip = var.ansible-server-pvt-ip, squid_proxy_hostname = var.squid-proxy-hostname, squid_proxy_pvt_ip = var.squid-proxy-pvt-ip, ubuntu10_hostname = var.ubuntu10-hostname, ubuntu10_pvt_ip = var.ubuntu10-pvt-ip, ubuntu11_hostname = var.ubuntu11-hostname, ubuntu11_pvt_ip = var.ubuntu11-pvt-ip, redhat10_hostname = var.redhat10-hostname, redhat10_pvt_ip = var.redhat10-pvt-ip, redhat11_hostname = var.redhat11-hostname, redhat11_pvt_ip = var.redhat11-pvt-ip })
   # Copy private key to ssh to ansible-server from bastion-server.
   provisioner "file" {
     source      = "ssh-keys\\ansible-server-key"
@@ -143,7 +143,7 @@ resource "aws_instance" "ubuntu10" {
   key_name                    = aws_key_pair.ansible-server-key.key_name
   subnet_id                   = aws_subnet.main-vpc-pvt-subnet.id
   associate_public_ip_address = false
-  vpc_security_group_ids      = [aws_security_group.allow-ansible-ssh.id]
+  vpc_security_group_ids      = [aws_security_group.allow-ansible-ssh.id, aws_security_group.allow-bastion-ssh.id]
   private_ip                  = var.ubuntu10-pvt-ip
   tenancy                     = "default"
   # Root EBS volume cannot be < 8 GB as the size of snapshot it is created from, is of 8 GB.
@@ -175,7 +175,7 @@ resource "aws_instance" "ubuntu11" {
   key_name                    = aws_key_pair.ansible-server-key.key_name
   subnet_id                   = aws_subnet.main-vpc-pvt-subnet.id
   associate_public_ip_address = false
-  vpc_security_group_ids      = [aws_security_group.allow-ansible-ssh.id]
+  vpc_security_group_ids      = [aws_security_group.allow-ansible-ssh.id, aws_security_group.allow-bastion-ssh.id]
   private_ip                  = var.ubuntu11-pvt-ip
   tenancy                     = "default"
   metadata_options {
@@ -198,7 +198,7 @@ resource "aws_instance" "redhat10" {
   key_name                    = aws_key_pair.ansible-server-key.key_name
   subnet_id                   = aws_subnet.main-vpc-pvt-subnet.id
   associate_public_ip_address = false
-  vpc_security_group_ids      = [aws_security_group.allow-ansible-ssh.id]
+  vpc_security_group_ids      = [aws_security_group.allow-ansible-ssh.id, aws_security_group.allow-bastion-ssh.id]
   private_ip                  = var.redhat10-pvt-ip
   tenancy                     = "default"
   metadata_options {
@@ -221,7 +221,7 @@ resource "aws_instance" "redhat11" {
   key_name                    = aws_key_pair.ansible-server-key.key_name
   subnet_id                   = aws_subnet.main-vpc-pvt-subnet.id
   associate_public_ip_address = false
-  vpc_security_group_ids      = [aws_security_group.allow-ansible-ssh.id]
+  vpc_security_group_ids      = [aws_security_group.allow-ansible-ssh.id, aws_security_group.allow-bastion-ssh.id]
   private_ip                  = var.redhat11-pvt-ip
   tenancy                     = "default"
   metadata_options {
