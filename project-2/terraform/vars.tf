@@ -44,14 +44,14 @@ variable "pubjump-hostname" {
   description = "Hostname of pubjump host."
 }
 
-variable "pvtjump-pvt-ip" {
+variable "squid-proxy-pvt-ip" {
   type        = string
-  description = "Private IP address of pvtjump host."
+  description = "Private IP address of squid proxy host."
 }
 
-variable "pvtjump-hostname" {
+variable "squid-proxy-hostname" {
   type        = string
-  description = "Hostname of pvtjump host."
+  description = "Hostname of squid proxy host."
 }
 
 variable "pubans-pvt-ip" {
@@ -62,6 +62,16 @@ variable "pubans-pvt-ip" {
 variable "pubans-hostname" {
   type        = string
   description = "Hostname of pubans host."
+}
+
+variable "pvtjump-pvt-ip" {
+  type        = string
+  description = "Private IP address of pvtjump host."
+}
+
+variable "pvtjump-hostname" {
+  type        = string
+  description = "Hostname of pvtjump host."
 }
 
 variable "pvtans-pvt-ip" {
