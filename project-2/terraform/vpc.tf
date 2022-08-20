@@ -8,6 +8,7 @@ resource "aws_vpc" "main-vpc" {
   enable_dns_hostnames = false
   tags = {
     Name      = "main-vpc"
+    Env       = "Management"
     Terraform = "True"
     Owner     = "Vikram Singh"
   }
