@@ -83,3 +83,8 @@ variable "pvtans-hostname" {
   type        = string
   description = "Hostname of pvtans host."
 }
+
+variable "ansible-pub-key" {
+  type        = string
+  description = "Public key of ansible."
+}
