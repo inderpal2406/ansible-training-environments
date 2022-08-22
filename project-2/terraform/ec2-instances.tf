@@ -20,12 +20,13 @@ resource "aws_instance" "pubjump" {
     Terraform = "True"
     Owner     = "Vikram Singh"
   }
+  user_data = templatefile("template-files\\ansible-pre-requisites.sh.tftpl", { ansible_pub_key = var.ansible-pub-key })
 }
-/*
+
 # Squid proxy server on ubuntu.
 
 resource "aws_instance" "squid-proxy" {
-  ami                         = data.aws_ami.ubuntu-ami-id
+  ami                         = data.aws_ami.ubuntu-ami-id.id
   instance_type               = "t2.micro"
   key_name                    = aws_key_pair.main-vpc-pubsub-01-1a-key.key_name
   subnet_id                   = aws_subnet.main-vpc-pubsub-01-1a.id
@@ -44,8 +45,9 @@ resource "aws_instance" "squid-proxy" {
     Terraform = "True"
     Owner     = "Vikram Singh"
   }
+  user_data = templatefile("template-files\\ansible-pre-requisites.sh.tftpl", { ansible_pub_key = var.ansible-pub-key })
 }
-
+/*
 # Ansible server on Redhat in public subnet.
 
 resource "aws_instance" "pubans" {
