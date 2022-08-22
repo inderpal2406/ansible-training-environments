@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+# Redhat won't need -m option to create home directory.
+useradd -d /home/ansible -s /bin/bash -c "Ansible user" ansible
+touch /etc/sudoers.d/ansible
+echo "ansible ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/ansible
+chmod 440 /etc/sudoers.d/ansible
+mkdir /home/ansible/.ssh
+touch /home/ansible/.ssh/authorized_keys
+echo "${ansible_pub_key}" > /home/ansible/.ssh/authorized_keys
+chown -R ansible:ansible /home/ansible/.ssh
+chmod 700 /home/ansible/.ssh
+chmod 600 /home/ansible/.ssh/authorized_keys
+# Redhat doesn't have python by default. But installing ansible using yum,
+# installs a functional version of python as well.
+yum install ansible -y
+mkdir -p /home/ansible/git_repos/
+sudo chown ansible:ansible /home/ansible/git_repos
