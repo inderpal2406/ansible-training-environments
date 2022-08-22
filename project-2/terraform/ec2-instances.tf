@@ -21,6 +21,30 @@ resource "aws_instance" "pubjump" {
     Owner     = "Vikram Singh"
   }
   user_data = templatefile("template-files\\ansible-pre-requisites.sh.tftpl", { ansible_pub_key = var.ansible-pub-key })
+  provisioner "file" {
+    source      = "ssh-keys\\ansible-key"
+    destination = "/tmp/id_rsa"
+  }
+  # The order of execution of user_data & remote-exec may not be fixed.
+  # At a time, it is possible that both may run concurrently.
+  # Our remote-exec was failing repeatedly by giving error that ansible user doesn't exist.
+  # Home dir of ansible doesn't exist.
+  # So, we introduced delay by sleep command to ensure user_data gets completed first.
+  # Delay of 5 & 10 didn't work but of 30 secs worked.
+  provisioner "remote-exec" {
+    inline = [
+      "sleep 30",
+      "sudo mv /tmp/id_rsa /home/ansible/.ssh/",
+      "sudo chown ansible:ansible /home/ansible/.ssh/id_rsa",
+      "sudo chmod 600 /home/ansible/.ssh/id_rsa"
+    ]
+  }
+  connection {
+    type        = "ssh"
+    user        = "ubuntu"
+    private_key = file("ssh-keys\\main-vpc-pubsub-01-1a-key")
+    host        = aws_instance.pubjump.public_ip
+  }
 }
 
 # Squid proxy server on ubuntu.
@@ -47,15 +71,15 @@ resource "aws_instance" "squid-proxy" {
   }
   user_data = templatefile("template-files\\ansible-pre-requisites.sh.tftpl", { ansible_pub_key = var.ansible-pub-key })
 }
-/*
+
 # Ansible server on Redhat in public subnet.
 
 resource "aws_instance" "pubans" {
-  ami                         = data.aws_ami.redhat-ami-id
+  ami                         = data.aws_ami.redhat-ami-id.id
   instance_type               = "t2.micro"
   key_name                    = aws_key_pair.main-vpc-pubsub-01-1a-key.key_name
   subnet_id                   = aws_subnet.main-vpc-pubsub-01-1a.id
-  associate_public_ip_address = true
+  associate_public_ip_address = true # To install ansible without proxy server using user_data.
   vpc_security_group_ids      = [aws_security_group.allow-pubjump-ssh.id]
   private_ip                  = var.pubans-pvt-ip
   tenancy                     = "default"
@@ -63,12 +87,12 @@ resource "aws_instance" "pubans" {
     http_endpoint = "enabled"
     http_tokens   = "required"
   }
-  tags {
+  tags = {
     Name      = var.pubans-hostname
     Env       = "Management"
     App       = "Ansible"
     Terraform = "True"
     Owner     = "Vikram Singh"
   }
+  user_data = templatefile("template-files\\pubans-init.sh.tftpl", { ansible_pub_key = var.ansible-pub-key })
 }
-*/
