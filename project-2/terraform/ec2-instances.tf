@@ -20,9 +20,9 @@ resource "aws_instance" "pubjump" {
     Terraform = "True"
     Owner     = "Vikram Singh"
   }
-  user_data = templatefile("template-files\\ansible-pre-requisites.sh.tftpl", { ansible_pub_key = var.ansible-pub-key })
+  user_data = templatefile("template-files\\pubans-ansible-pre-requisites.sh.tftpl", { pubans_ansible_pub_key = var.pubans-ansible-pub-key })
   provisioner "file" {
-    source      = "ssh-keys\\ansible-key"
+    source      = "ssh-keys\\pubans-ansible-key"
     destination = "/tmp/id_rsa"
   }
   # The order of execution of user_data & remote-exec may not be fixed.
@@ -69,7 +69,7 @@ resource "aws_instance" "squid-proxy" {
     Terraform = "True"
     Owner     = "Vikram Singh"
   }
-  user_data = templatefile("template-files\\ansible-pre-requisites.sh.tftpl", { ansible_pub_key = var.ansible-pub-key })
+  user_data = templatefile("template-files\\pubans-ansible-pre-requisites.sh.tftpl", { pubans_ansible_pub_key = var.pubans-ansible-pub-key })
 }
 
 # Ansible server on Redhat in public subnet.
@@ -94,5 +94,55 @@ resource "aws_instance" "pubans" {
     Terraform = "True"
     Owner     = "Vikram Singh"
   }
-  user_data = templatefile("template-files\\pubans-init.sh.tftpl", { ansible_pub_key = var.ansible-pub-key })
+  user_data = templatefile("template-files\\pubans-init.sh.tftpl", { pubans_ansible_pub_key = var.pubans-ansible-pub-key })
+}
+
+# Ubuntu jump server in private subnet.
+
+resource "aws_instance" "pvtjump" {
+  ami                         = data.aws_ami.ubuntu-ami-id.id
+  instance_type               = "t2.micro"
+  key_name                    = aws_key_pair.main-vpc-pvtsub-01-1a-key.key_name
+  subnet_id                   = aws_subnet.main-vpc-pvtsub-01-1a.id
+  associate_public_ip_address = false
+  vpc_security_group_ids      = [aws_security_group.allow-pubjump-ssh.id, aws_security_group.allow-pvtans-ssh.id]
+  private_ip                  = var.pvtjump-pvt-ip
+  tenancy                     = "default"
+  metadata_options {
+    http_endpoint = "enabled"
+    http_tokens   = "required"
+  }
+  tags = {
+    Name      = var.pvtjump-hostname
+    Env       = "Management"
+    App       = "Jump Server"
+    Terraform = "True"
+    Owner     = "Vikram Singh"
+  }
+  user_data = templatefile("template-files\\pvtans-ansible-pre-requisites.sh.tftpl", { pvtans_ansible_pub_key = var.pvtans-ansible-pub-key })
+}
+
+# Ansible server on redhat server in private subnet.
+
+resource "aws_instance" "pvtans" {
+  ami                         = data.aws_ami.redhat-ami-id.id
+  instance_type               = "t2.micro"
+  key_name                    = aws_key_pair.main-vpc-pvtsub-01-1a-key.key_name
+  subnet_id                   = aws_subnet.main-vpc-pvtsub-01-1a.id
+  associate_public_ip_address = false
+  vpc_security_group_ids      = [aws_security_group.allow-pvtjump-ssh.id, aws_security_group.allow-pubans-ssh.id]
+  private_ip                  = var.pvtans-pvt-ip
+  tenancy                     = "default"
+  metadata_options {
+    http_endpoint = "enabled"
+    http_tokens   = "required"
+  }
+  tags = {
+    Name      = var.pvtans-hostname
+    Env       = "Management"
+    App       = "Jump Server"
+    Terraform = "True"
+    Owner     = "Vikram Singh"
+  }
+  user_data = templatefile("template-files\\pubans-init.sh.tftpl", { pubans_ansible_pub_key = var.pubans-ansible-pub-key })
 }
