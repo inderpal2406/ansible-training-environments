@@ -8,7 +8,7 @@
       package:
         name: "git"
         state: "latest"
-    - name: "Ensure .gitconfig is configured for ansible user."
+    - name: "Ensure .gitconfig is configured by copying file for ansible user."
       copy:
         src: "../files/ansible.gitconfig"
         dest: "/home/ansible/.gitconfig"
