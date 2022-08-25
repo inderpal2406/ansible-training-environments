@@ -1,5 +1,5 @@
 ---
-- name: "Ensure git is of latest version & git user config is in place for controllers."
+- name: "Ensure git is of latest version & git user config is in place for pubans controller."
   hosts: "pubcontroller"
   gather_facts: false
   become: true

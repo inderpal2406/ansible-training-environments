@@ -1,0 +1,39 @@
+---
+- name: "Ensure group & users for DevOps team members are created on all hosts."
+  hosts: "all"
+  gather_facts: false
+  become: true
+  tasks:
+    - name: "Ensure devops group is present."
+      group:
+        name: "devops"
+        state: "present"
+    - name: "Ensure sudoers file for devops group is present."
+      copy:
+        content: "%devops ALL=(ALL:ALL) ALL \n"
+        dest: "/etc/sudoers.d/devops_group"
+        mode: "0440"
+    - name: "Ensure devops team users are present and member of devops group."
+      user:
+        name: "{{ item.name }}"
+        comment: "{{ item.comment }}"
+        create_home: "yes"
+        groups: "devops"
+        append: "yes"
+        home: "/home/{{ item.name }}"
+        shell: "/bin/bash"
+        state: "present"
+      loop:
+        - { name: "inderpal", comment: "Inderpal Singh - DevOps Team" }
+        - { name: "omkar", comment: "Omkar Solaskar - DevOps Team" }
+        - { name: "sarabjeet", comment: "Sarabjeet Singh - DevOps Team" }
+    - name: "Ensure public ssh key for devops team users is copied to authorized_keys file."
+      authorized_key:
+        user: "{{ item.user }}" 
+        key: "{{ lookup('file', '../files/user_pub_keys/devops_team/{{ item.user }}-key.pub') }}"
+        state: "present"
+      loop: 
+        - { user: "inderpal" }
+        - { user: "omkar" }
+        - { user: "sarabjeet" }
+
