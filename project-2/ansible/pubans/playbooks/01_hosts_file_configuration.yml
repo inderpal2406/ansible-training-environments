@@ -1,0 +1,21 @@
+---
+- name: "Ensure hosts file with all DNS entries is setup on all public subnet ubuntu hosts."
+  hosts: "ubuntu"
+  gather_facts: false
+  become: true
+  tasks:
+    - name: "Ensure hosts file is copied to all hosts."
+      copy:
+        src: "../files/ubuntu_hosts_file"
+        dest: "/etc/hosts"
+
+- name: "Ensure hosts file with all DNS entries is setup on all public subnet redhat hosts & pvtans host."
+  hosts: "redhat"
+  gather_facts: false
+  become: true
+  tasks:
+    - name: "Ensure hosts file is copied to all hosts."
+      copy:
+        src: "../files/redhat_hosts_file"
+        dest: "/etc/hosts"
+

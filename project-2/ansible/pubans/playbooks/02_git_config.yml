@@ -1,0 +1,15 @@
+---
+- name: "Ensure git is of latest version & git user config is in place for controllers."
+  hosts: "pubcontroller"
+  gather_facts: false
+  become: true
+  tasks:
+    - name: "Ensure git package is installed & of latest version."
+      package:
+        name: "git"
+        state: "latest"
+    - name: "Ensure .gitconfig is configured for ansible user."
+      copy:
+        src: "../files/ansible.gitconfig"
+        dest: "/home/ansible/.gitconfig"
+

@@ -1,0 +1,26 @@
+[ubuntu]
+10.0.0.4	# pubjump
+10.0.0.5	# squid-proxy
+
+[redhat]
+10.0.0.6	# pubans
+10.0.1.5	# pvtans
+
+[pubhosts]
+10.0.0.4
+10.0.0.5
+10.0.0.6
+
+[pvthosts]
+10.0.1.5
+
+[pubcontroller]
+10.0.0.6
+
+[pvtcontroller]
+10.0.1.5
+
+[controllers]
+10.0.0.6
+10.0.1.5
+

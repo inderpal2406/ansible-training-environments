@@ -1,0 +1,8 @@
+---
+- name: "Ensure ansible can reach all hosts and check python interpreter there."
+  hosts: "all"
+  gather_facts: false
+  tasks:
+    - name: Ensure ansible can reach all hosts using ping module.
+      ping:
+
