@@ -10,7 +10,7 @@
         state: "present"
     - name: "Ensure sudoers file for devops group is present."
       copy:
-        content: "%devops ALL=(ALL:ALL) ALL \n"
+        content: "%devops ALL=(ALL) NOPASSWD:ALL\n"
         dest: "/etc/sudoers.d/devops_group"
         mode: "0440"
     - name: "Ensure devops team users are present and member of devops group."
