@@ -1,3 +1,5 @@
 [user]
 	name = Ansible
 	email = ansible@test.com
+[pull]
+	rebase = false
