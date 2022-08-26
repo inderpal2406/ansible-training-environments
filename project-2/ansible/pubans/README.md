@@ -36,8 +36,20 @@
 34. %devops ALL=(ALL:ALL) ALL
 35. But it would become difficult for users to remember their passwords as well especially if these expire on hosts at different times.
 36. So we dropped idea of passwords for users. Only key based authentication while login and sudo priivilege without password.
+36. We removed all devops users again by changing state to absent. But didn;t use force argument in user module for this.
+36. Because of this, the home dir was not deleted for the users though the users were deleted.
+36. When users were created again, authorized_keys task didn;t change on the hosts anything as the home dir already existed.
 37. we removed expect package from pubans host.
 38. created bash scripts to remove chached keys in known_hosts file and ssh to hosts to cache keys again, to mitigate issues of ansible connectivity when hosts are destroyed & created again.
 39. Now we'll commit changes and push to remote repo using ansible user.
 40. Then use inderpal user to update playbooks going forward.
+41. Logged in to pubans as inderpal user and created host_vars & group_vars dirs.
+42. ansible_user: ansible was set in group_vars/all file.
+43. ansible_connection: local was set in host_vars/pubans.
+44. Tried to run 00_ping.yml. It worked only for pubans as connection was local.
+45. It failed for all other hosts saying ssh key permission denied.
+46. It may tried to login to remote hosts using inderpal account which had pub key on all hosts but not pvt key on pubans.
+47. But with our logic it should have used ansible user keys. Need to read more on this.
+48. Switched to ansible user on pubans and started further playbook development.
+49. Add play in 03_users.yml to create .gitconfig file for all devops team users on pubans using template module.
 
