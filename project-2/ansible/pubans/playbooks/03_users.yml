@@ -37,3 +37,20 @@
         - { user: "omkar" }
         - { user: "sarabjeet" }
 
+- name: "Ensure .gitconfig file is configured on pubans host for all devops team members."
+  hosts: "pubans"
+  gather_facts: false
+  become: true
+  tasks:
+    - name: "Template .gitconfig file."
+      template:
+        src: "../files/gitconfig.j2"
+        dest: "/home/{{ item.name }}/.gitconfig"
+        owner: "{{ item.name }}"
+        group: "{{ item.name }}"
+        mode: "0644"
+      loop:
+        - { name: "inderpal" }
+        - { name: "omkar" }
+        - { name: "sarabjeet" }
+
