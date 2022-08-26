@@ -37,18 +37,29 @@
         - { user: "omkar" }
         - { user: "sarabjeet" }
 
-- name: "Ensure .gitconfig file is configured on pubans host for all devops team members."
+- name: "Ensure .gitconfig file & git_repos dir is configured on pubans host for all devops team members."
   hosts: "pubans"
   gather_facts: false
   become: true
   tasks:
-    - name: "Template .gitconfig file."
+    - name: "Copy gitconfig.j2 template file to .gitconfig file in each user's home dir."
       template:
         src: "../files/gitconfig.j2"
         dest: "/home/{{ item.name }}/.gitconfig"
         owner: "{{ item.name }}"
         group: "{{ item.name }}"
         mode: "0644"
+      loop:
+        - { name: "inderpal" }
+        - { name: "omkar" }
+        - { name: "sarabjeet" }
+    - name: "Create git_repos directory in home directory of each user."
+      file:
+        dest: "/home/{{ item.name }}/git_repos"
+        state: "directory"
+        owner: "{{ item.name }}"
+        group: "{{ item.name }}"
+        mode: "0775"
       loop:
         - { name: "inderpal" }
         - { name: "omkar" }
