@@ -52,4 +52,6 @@
 47. But with our logic it should have used ansible user keys. Need to read more on this.
 48. Switched to ansible user on pubans and started further playbook development.
 49. Add play in 03_users.yml to create .gitconfig file for all devops team users on pubans using template module.
+50. Created git_repos dir in home dir of all devops users on pubans using 03_users.yml.
+51. Tried to create block of tasks such as templating .gitconfig & creating git_repos dir together and loop through same list of devops users. But got error as block may not support loop. Need to read more on this.
 
