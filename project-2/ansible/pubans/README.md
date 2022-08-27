@@ -58,4 +58,11 @@
 53. Git module in ansible can be used to clone the remote git repo.
 54. However, it'll clone the repo into the dir specified and won't create a new dir with same name as repo as in normal git clone.
 55. File module, state argument if set to absent for a dir, will delete the dir recursively even if it is not empty. No special argument like force exists to delete a non-empty dir.
+56. Create var file for each host in host_vars dir of pubans.
+57. Create 04_hostname_timezone_setup.yml playbook to setup hostnames of all hosts.
+58. Ansible facts in a task/handler can be mentioned as ansible_facts["fact_name"].
+59. These cannot be mentioned as vars using jinja2 format, like "{{ ansible_distribution }}". It gave error to us in this format.
+60. Task to update timezone added in playbook 04_hostname_timezone_setup.yml.
+61. In current setup, this task notifies multiple handlers using listen parameter in the handlers to restart cron service.
+62. The handler will run based on ansible fact value for that host otherwise gets skipped.
 
