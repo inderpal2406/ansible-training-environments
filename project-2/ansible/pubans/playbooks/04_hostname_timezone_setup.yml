@@ -1,0 +1,11 @@
+---
+- name: "Ensure hostname and timezone is setup for all hosts."
+  hosts: "all"
+  gather_facts: false
+  become: true
+  tasks:
+    - name: "Ensure hostname is setup."
+      hostname: 
+        name: "{{ hostname }}"
+        use: "systemd"  # Ubuntu & redhat supports systemd.
+
