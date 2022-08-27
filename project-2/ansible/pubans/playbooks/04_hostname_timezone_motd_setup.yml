@@ -1,5 +1,5 @@
 ---
-- name: "Ensure hostname and timezone is setup for all hosts."
+- name: "Ensure hostname, timezone & motd is setup for all hosts."
   hosts: "all"
   gather_facts: true
   become: true
@@ -14,6 +14,10 @@
         #name: "Africa/Algiers"
       notify:
         - "Restart cron service."
+    - name: "Ensure motd is setup."
+      template:
+        src: "../files/motd.j2"
+        dest: "/etc/motd"
   handlers:
     - name: "Restart cron service on Ubuntu."
       service:
