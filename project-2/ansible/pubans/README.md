@@ -66,4 +66,6 @@
 61. In current setup, this task notifies multiple handlers using listen parameter in the handlers to restart cron service.
 62. The handler will run based on ansible fact value for that host otherwise gets skipped.
 63. Add playbook 05_configure_squid_proxy.yml to install squid & allow all traffic through it.
-
+64. Add playbook 06_set_proxy_on_hosts.yml to configure proxy details for yum & apt to connect to public pkg repos on public internet via proxy server.
+65. Need to check how proxy details for each user can be setup so that they connect to public internet via proxy server.
+66. 
