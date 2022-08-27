@@ -1,11 +1,35 @@
 ---
 - name: "Ensure hostname and timezone is setup for all hosts."
   hosts: "all"
-  gather_facts: false
+  gather_facts: true
   become: true
   tasks:
     - name: "Ensure hostname is setup."
       hostname: 
         name: "{{ hostname }}"
         use: "systemd"  # Ubuntu & redhat supports systemd.
+    - name: "Setup timezone to IST."
+      timezone:
+        name: "Asia/Calcutta"
+        #name: "Africa/Algiers"
+      notify:
+        - "Restart cron service."
+  handlers:
+    - name: "Restart cron service on Ubuntu."
+      service:
+        name: "cron"
+        state: "restarted"
+      listen: "Restart cron service."
+      when: ansible_facts["distribution"] == "Ubuntu"
+    - name: "Restart crond service on RedHat."
+      service:
+        name: "crond"
+        state: "restarted"
+      listen: "Restart cron service."
+      when: ansible_facts["distribution"] == "RedHat"
+
+# Alternate way could be that the timezone task notifies 2 different handlers.
+# Each of these handlers has when condition based on ansible fact.
+# Both gets notified but only the one which matches ansible fact runs for that host.
+# In current approach, multiple handlers are notified using the listen parameter in the handler.
 
