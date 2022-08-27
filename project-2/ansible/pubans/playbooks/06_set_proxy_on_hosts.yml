@@ -1,0 +1,23 @@
+---
+- name: "Ensure proxy is setup on hosts to connect to public internet."
+  hosts: "all"
+  gather_facts: true
+  become: true
+  vars:
+    squid_proxy_hostname: "squid-proxy"
+    squid_proxy_port: "3128"
+  tasks:
+    - name: "Ensure yum.conf has proxy details on RedHat hosts."
+      lineinfile:
+        path: "/etc/yum.conf"
+        insertafter: "EOF"
+        line: "proxy=http://{{ squid_proxy_hostname }}:{{ squid_proxy_port }}/"
+      when: ansible_facts["distribution"] == "RedHat"
+    - name: "Ensure apt-get has conf file with proxy details on Ubuntu hosts."
+      copy:
+        content: |
+          Acquire::http::Proxy "http://{{ squid_proxy_hostname }}:{{ squid_proxy_port }}/";
+          Acquire::https::Proxy "http://{{ squid_proxy_hostname }}:{{ squid_proxy_port }}/";
+        dest: "/etc/apt/apt.conf.d/proxy.conf"
+      when: ansible_facts["distribution"] == "Ubuntu"
+
