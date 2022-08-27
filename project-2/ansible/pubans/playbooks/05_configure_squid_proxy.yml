@@ -1,0 +1,23 @@
+---
+- name: "Ensure squid-proxy server is configured."
+  hosts: "squid-proxy"
+  gather_facts: false
+  become: true
+  tasks:
+    - name: "Ensure squid pkg is installed."
+      package:
+        name: "squid"
+        state: "present"
+    - name: "Ensure squid.conf is updated to allow all traffic."
+      lineinfile:
+        path: "/etc/squid/squid.conf"
+        regexp: "^http_access deny all"
+        line: "http_access allow all"
+      notify:
+        - "Restart squid service."
+  handlers:
+    - name: "Restart squid service."
+      service:
+        name: "squid.service"
+        state: "restarted"
+ 
