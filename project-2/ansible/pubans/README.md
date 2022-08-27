@@ -65,4 +65,5 @@
 60. Task to update timezone added in playbook 04_hostname_timezone_setup.yml.
 61. In current setup, this task notifies multiple handlers using listen parameter in the handlers to restart cron service.
 62. The handler will run based on ansible fact value for that host otherwise gets skipped.
+63. Add playbook 05_configure_squid_proxy.yml to install squid & allow all traffic through it.
 
