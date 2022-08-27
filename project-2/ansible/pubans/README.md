@@ -54,4 +54,8 @@
 49. Add play in 03_users.yml to create .gitconfig file for all devops team users on pubans using template module.
 50. Created git_repos dir in home dir of all devops users on pubans using 03_users.yml.
 51. Tried to create block of tasks such as templating .gitconfig & creating git_repos dir together and loop through same list of devops users. But got error as block may not support loop. Need to read more on this.
+52. Declared devops users as list of vars in the play and looped tasks through it by using item in arguments & template file.
+53. Git module in ansible can be used to clone the remote git repo.
+54. However, it'll clone the repo into the dir specified and won't create a new dir with same name as repo as in normal git clone.
+55. File module, state argument if set to absent for a dir, will delete the dir recursively even if it is not empty. No special argument like force exists to delete a non-empty dir.
 
