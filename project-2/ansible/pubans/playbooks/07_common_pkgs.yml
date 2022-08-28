@@ -1,0 +1,38 @@
+---
+- name: "Ensure basic packages are installed and of latest version on all hosts."
+  hosts: "all"
+  gather_facts: true
+  become: true
+  tasks:
+    # Packages from below task has same name in ubuntu & redhat distributions.
+    - name: "Ensure telnet, nano, tree, jq, whois are installed & of latest version."
+      package: 
+        name: 
+          - "telnet"
+          - "nano"
+          - "tree"
+          - "jq"
+          - "whois"
+        state: "latest"
+    - name: "Ensure bind-utils, vim-enhanced are installed & latest version on RedHat hosts."
+      package:
+        name: 
+          - "bind-utils"        # nslookup, dig
+          - "vim-enhanced"
+        state: "latest"
+      when: ansible_facts["distribution"] == "RedHat"
+    - name: "Ensure bind9-dnsutils, vim, bat are installed & latest version on Ubuntu hosts."
+      package:
+        name: 
+          - "bind9-dnsutils"    # nslookup, dig
+          - "vim"
+          - "bat"
+        state: "latest"
+      when: ansible_facts["distribution"] == "Ubuntu"
+    - name: "Ensure bat soft link is created & points to batcat executable on Ubuntu hosts."
+      file:
+        src: "/usr/bin/batcat"
+        dest: "/usr/bin/bat"
+        state: "link"
+      when: ansible_facts["distribution"] == "Ubuntu"
+
