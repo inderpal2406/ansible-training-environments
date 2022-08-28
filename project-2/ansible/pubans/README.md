@@ -68,4 +68,8 @@
 63. Add playbook 05_configure_squid_proxy.yml to install squid & allow all traffic through it.
 64. Add playbook 06_set_proxy_on_hosts.yml to configure proxy details for yum & apt to connect to public pkg repos on public internet via proxy server.
 65. Need to check how proxy details for each user can be setup so that they connect to public internet via proxy server.
-66. 
+66. If a task fails for a specific host, then next task won't run for that host. But next task will execute for other hosts.
+67. Running package for ubuntu hosts at times won't be able to install the package though the package exists in ubuntu repos.
+68. In such cases, we manually login to ubuntu host, run "sudo apt-get update" to update the repo details. Then run the playbook and most probably it'll get installed this time.
+69. Add playbook 07_common_pkgs.yml to install common packages on all hosts. Exception is bat which is installed only on ubuntu hosts as it is not available in yum repos of redhat.
+
