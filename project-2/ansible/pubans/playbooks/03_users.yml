@@ -30,7 +30,7 @@
     - name: "Ensure public ssh key for devops team users is copied to authorized_keys file."
       authorized_key:
         user: "{{ item.user }}" 
-        key: "{{ lookup('file', '../files/user_pub_keys/devops_team/{{ item.user }}-key.pub') }}"
+        key: "{{ lookup('file', '../files/user_pub_keys/devops/{{ item.user }}-key.pub') }}"
         state: "present"
       loop: 
         - { user: "inderpal" }
