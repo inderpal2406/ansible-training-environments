@@ -26,6 +26,12 @@
         shell: "/bin/bash"
         state: "present"
       loop: "{{ developers }}"
+    - name: "Ensure pub ssh key of dev users is copied to respective authorized_keys file."
+      authorized_key:
+        user: "{{ item.name }}"
+        key: "{{ lookup('file', '../files/user_pub_keys/developers/{{ item.name }}-key.pub') }}"
+        state: "present"
+      loop: "{{ developers }}"
     - name: "Ensure tester group is present."
       group:
         name: "tester"
@@ -39,6 +45,12 @@
         append: "yes"
         home: "/home/{{ item.name }}"
         shell: "/bin/bash"
+        state: "present"
+      loop: "{{ testers }}"
+    - name: "Ensure pub ssh key of testers is copied to respective authorized_keys file. "
+      authorized_key:
+        user: "{{ item.name }}"
+        key: "{{ lookup('file', '../files/user_pub_keys/testers/{{ item.name }}-key.pub') }}"
         state: "present"
       loop: "{{ testers }}"
 
