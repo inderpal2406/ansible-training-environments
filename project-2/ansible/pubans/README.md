@@ -73,4 +73,5 @@
 68. In such cases, we manually login to ubuntu host, run "sudo apt-get update" to update the repo details. Then run the playbook and most probably it'll get installed this time.
 69. Add playbook 07_common_pkgs.yml to install common packages on all hosts. Exception is bat which is installed only on ubuntu hosts as it is not available in yum repos of redhat.
 70. Create playbook 08_dev_test_users.yml to create & configure dev & tester user accounts on pubjump server for now.
-
+71. Create playbook 09_configure_editors.yml to configure editor settings for users.
+72. 2 lists can be concatenated as "{{ list1 }} + {{ list2 }}"
