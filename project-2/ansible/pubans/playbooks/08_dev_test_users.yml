@@ -1,0 +1,44 @@
+---
+- name: "Ensure developers & testers user accounts are created and configured on pubjump host."
+  hosts: "pubjump"
+  gather_facts: false
+  become: true
+  vars:
+    developers:
+      - { name: "rakesh", comment: "Rakesh Singh - Developer Team" }
+      - { name: "anita", comment: "Anita Kumar - Developer Team" }
+    testers:
+      - { name: "pooja", comment: "Pooja Hegde - Tester Team" }
+      - { name: "ashutosh", comment: "Ashutosh Gowarikar - Tester Team" }
+  tasks:
+    - name: "Ensure dev group is present."
+      group:
+        name: "dev"
+        state: "present"
+    - name: "Ensure developer user accounts are present."
+      user:
+        name: "{{ item.name }}"
+        comment: "{{ item.comment }}"
+        create_home: "yes"
+        groups: "dev"
+        append: "yes"
+        home: "/home/{{ item.name }}"
+        shell: "/bin/bash"
+        state: "present"
+      loop: "{{ developers }}"
+    - name: "Ensure tester group is present."
+      group:
+        name: "tester"
+        state: "present"
+    - name: "Ensure tester user accounts are present."
+      user:
+        name: "{{ item.name }}"
+        comment: "{{ item.comment }}"
+        create_home: "yes"
+        groups: "tester"
+        append: "yes"
+        home: "/home/{{ item.name }}"
+        shell: "/bin/bash"
+        state: "present"
+      loop: "{{ testers }}"
+
