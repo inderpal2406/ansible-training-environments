@@ -1,0 +1,79 @@
+---
+- name: "Ensure .nanorc, .vimrc (in home dir of devops users) & yaml.nanorc files are present on all hosts."
+  hosts: "all"
+  gather_facts: true 
+  become: true
+  vars:
+    devops:
+      - "inderpal"
+      - "omkar"
+      - "sarabjeet"
+  tasks:
+    # By default we don't get syntax highlighting files for yaml with nano.
+    # So we create one manually.
+    - name: "Ensure yaml.nanorc file is copied to remote hosts for yaml syntax highlighting in nano."
+      copy:
+        src: "../files/yaml.nanorc"
+        dest: "/usr/share/nano/"
+        mode: "0644"
+      when: ansible_facts["distribution"] == "RedHat"   # Ubuntu already has this file.
+    - name: "Copy nanorc_file to each devops user's home dir on remote host."
+      copy:
+        src: "../files/nanorc_file"
+        dest: "/home/{{ item }}/.nanorc"
+        owner: "{{ item }}"
+        group: "{{ item }}"
+        mode: "0644"
+      loop: "{{ devops }}"
+    - name: "Copy vimrc_file to each devops user's home dir on remote host."
+      copy:
+        src: "../files/vimrc_file"
+        dest: "/home/{{ item }}/.vimrc"
+        owner: "{{ item }}"
+        group: "{{ item }}"
+        mode: "0644"
+      loop: "{{ devops }}"
+- name: "Ensure .nanorc & .vimrc files are present in ansible user's home dir on all hosts."
+  hosts: "all"
+  gather_facts: false
+  become: false
+  tasks:
+    - name: "Copy nanorc_file to ansible user's home dir on remote host."
+      copy:
+        src: "../files/nanorc_file"
+        dest: "/home/ansible/.nanorc"
+        mode: "0644"
+    - name: "Copy vimrc_file to ansible user's home dir on remote host."
+      copy:
+        src: "../files/vimrc_file"
+        dest: "/home/ansible/.vimrc"
+        mode: "0644"
+- name: "Ensure .nanorc & .vimrc files are present for dev & tester users' home dir on pubjump host."
+  hosts: "pubjump"
+  gather_facts: false
+  become: true
+  vars:
+   developers:
+     - "rakesh"
+     - "anita"
+   testers:
+     - "pooja"
+     - "ashutosh"
+  tasks: 
+    - name: "Copy nanorc_file to dev & tester users' home dir on remote host."
+      copy:
+        src: "../files/nanorc_file"
+        dest: "/home/{{ item }}/.nanorc"
+        owner: "{{ item }}"
+        group: "{{ item }}"
+        mode: "0644"
+      loop: "{{ developers }} + {{ testers }}"  # Concatenate 2 lists
+    - name: "Copy vimrc_file to dev & tester users' home dir on remote host."
+      copy:
+        src: "../files/vimrc_file"
+        dest: "/home/{{ item }}/.vimrc"
+        owner: "{{ item }}"
+        group: "{{ item }}"
+        mode: "0644"
+      loop: "{{ developers }} + {{ testers }}"
+
