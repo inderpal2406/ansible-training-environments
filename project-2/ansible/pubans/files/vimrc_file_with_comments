@@ -1,0 +1,24 @@
+# .vimrc file with comments throws errors when vi/vim is launched.
+# This file is kept with comments for knowledge purpose.
+# Real file getting copied to hosts is vimrc_file
+
+
+# Enable syntax highlighting.
+syntax on
+
+# Set background as dark to make more contrast in syntax highlighting.
+set bg=dark
+
+# Auto command to run command automatically for all YAML files.
+autocmd FileType yaml setlocal ai et ts=2 sw=2 cuc cul
+# setlocal will override any other settings we might have.
+# ai=autoindent
+# et=expandtabs (to convert tabs to spaces)
+# ts=tabswap
+# sw=shiftwith
+# cuc is column highlighter
+# cul is row highlighter
+
+# I am putting another autocmd for yml as I think above will pick up only .yaml files.
+autocmd FileType yml setlocal ai et ts=2 sw=2 cuc cul
+
