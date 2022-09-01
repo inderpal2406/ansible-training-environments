@@ -58,7 +58,7 @@
     - name: "Create git_repos directory in home directory of each user."
       file:
         dest: "/home/{{ item }}/git_repos"
-        state: "absent"
+        state: "directory"
         owner: "{{ item }}"
         group: "{{ item }}"
         mode: "0775"
