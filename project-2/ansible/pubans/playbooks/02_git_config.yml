@@ -12,4 +12,7 @@
       copy:
         src: "../files/ansible.gitconfig"
         dest: "/home/ansible/.gitconfig"
+        owner: "ansible"
+        group: "ansible"
+        mode: "0644"
 
