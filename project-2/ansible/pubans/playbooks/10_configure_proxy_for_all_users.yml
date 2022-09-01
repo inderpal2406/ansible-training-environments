@@ -1,0 +1,16 @@
+---
+- name: "Ensure proxy is setup as env vars for all users on all hosts."
+  hosts: "all"
+  gather_facts: false
+  become: true
+  vars:
+    proxy_server: "squid-proxy"
+    proxy_port: "3128"
+  tasks:
+    # This file in /etc/profile.d dir would help setup env vars for all users for login sessions
+    # authenticated with key/password and login sessions via ssh command from remote host (as in ansible).
+    - name: "Copy the bash script template to /etc/profile.d/ dir to setup proxy env vars for users."
+      template:
+        src: "../files/proxy.sh.j2"
+        dest: "/etc/profile.d/proxy.sh"
+
