@@ -15,7 +15,7 @@
         dest: "/etc/profile.d/proxy.sh"
     - name: "Create file in /etc/sudoers.d dir to keep proxy env vars in sudo env while sudoing commands."
       copy:
-        content: 'Defaults env_keep += "HTTP_PROXY HTTPS_PROXY"\n'
+        content: 'Defaults env_keep += "HTTP_PROXY HTTPS_PROXY"'
         dest: "/etc/sudoers.d/keep_proxy_env_vars_in_sudo_env"
         mode: "0440"
 
