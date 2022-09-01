@@ -1,0 +1,44 @@
+---
+- name: "Ensure pvtans host is configured with ansible."
+  hosts: "pvtans"
+  gather_facts: true
+  become: true
+  vars:
+    devops_users:
+      # ansible is not in devops group, but still including it here in below list to
+      # get the task done for ansible user as well along with devops user.
+      - "ansible"
+      - "inderpal"
+      - "omkar"
+      - "sarabjeet"
+  tasks:
+    - name: "Ensure ansible is installed."
+      package:
+        name: "ansible"
+        state: "present"
+    - name: "Ensure git pkg is installed & latest."
+      package:
+        name: "git"
+        state: "latest"
+    - name: "Copy gitconfig.j2 template file as .gitconfig file in each devops user's home dir."
+      template: 
+        src: "../files/gitconfig.j2"
+        dest: "/home/{{ item }}/.gitconfig"
+        owner: "{{ item }}"
+        group: "{{ item }}"
+        mode: "0644"
+      loop: "{{ devops_users }}"
+    - name: "Create git_repos directory in home directory of each user."
+      file:
+        dest: "/home/{{ item }}/git_repos"
+        state: "directory"
+        owner: "{{ item }}"
+        group: "{{ item }}"
+        mode: "0775"
+      loop: "{{ devops_users }}"
+    - name: "Clone ansible-training-environments git repo to homedir/git_repos folder of each devops user."
+      git:
+        dest: "/home/{{ item }}/git_repos/ansible-training-environments"
+        repo: "https://github.com/inderpal2406/ansible-training-environments.git"
+      loop: "{{ devops_users }}"
+
