@@ -75,3 +75,7 @@
 70. Create playbook 08_dev_test_users.yml to create & configure dev & tester user accounts on pubjump server for now.
 71. Create playbook 09_configure_editors.yml to configure editor settings for users.
 72. 2 lists can be concatenated as "{{ list1 }} + {{ list2 }}"
+73. hosts: "pubans" "pvtcontroller" won't work but hosts: "pvtans pubcontroller" would work. Defining multiple host targets.
+74. Create playbook 10_configure_proxy_for_all_users.yml to configure proxy env vars for all users on all hosts.
+75. Placing a bash script in /etc/profile.d dir of each host to setup proxy vars in user env, would help setup proxy var in sessions authenticated with key/password & ssh sessions from remote host executed to run commands from remote host.
+
