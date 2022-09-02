@@ -78,4 +78,23 @@
 73. hosts: "pubans" "pvtcontroller" won't work but hosts: "pvtans pubcontroller" would work. Defining multiple host targets.
 74. Create playbook 10_configure_proxy_for_all_users.yml to configure proxy env vars for all users on all hosts.
 75. Placing a bash script in /etc/profile.d dir of each host to setup proxy vars in user env, would help setup proxy var in sessions authenticated with key/password & ssh sessions from remote host executed to run commands from remote host.
+76. Create playbook 11_configure_pvtans.yml to configure pvtans server completely.
+77. Playbook from 00 to 09 were read and tasks applicable for pvtans server from those playbooks were written in 11 playbook.
+78. pvtans server was not included in tasks of previous playbooks. We wanted to have separate playbook just to configure pvtans fully.
+79. Since, pvtans is in private subnet, it had proxy server configured in yum conf file to connect to pkg repos on internet via proxy server.
+80. While cloning remote git repo of ansible-training-environments to pvtans under each devops user's and ansible user's home dir, we got an error that remote git repo is not reachable.
+81. This was because in playbook, ansible has escalated privilege to root user and was trying to clone the repo as root user.
+82. This couldn't happen as proxy server details were not set at user level.
+83. So, playbook 10_configure_proxy_for_all_users.yml was written to setup env vars having proxy server details in each user's env.
+84. So, no each user's (including root) user had env vars with proxy server details.
+85. However, when any user tried to execute a command using sudo, then env used to get changed and proxy vars used to disappear. Maybe sudo initiates its env in a different way.
+86. So, we created a file in /etc/sudoers.d dir to instruct sudo to keep env vars HTTP_PROXY HTTPS_PROXY from user env in sudo env as well.
+87. This was done in playbook 10. While creating playbook 10, we committed below mistakes,<br>
+Actual possible line in file: Defaults env_keep += "ftp_proxy http_proxy https_proxy no_proxy"
+First mistake: i didn't add "", instead complete line as "Defaults env_keep += ftp_proxy http_proxy https_proxy no_proxy" in copy task content # so sudoers was corrupted
+Second mistake: 'Defaults env_keep += "ftp_proxy http_proxy https_proxy no_proxy"\n' in content in copy module - \n get copied as it is and corrupted sudoers.
+Third mistake: 'Defaults env_keep += "ftp_proxy http_proxy https_proxy no_proxy"' in content in copy module - worked properly in ubuntu but not on redhat as redhat needed new line char at the end.
+Recreated redhat ans servers - then manually add same line with no \n and checked if it corrupts the file. Without neline char at end of line in sudoers, redhat doesn't read it properly.
+So, fourth mistake: Defaults env_keep += "ftp_proxy http_proxy https_proxy no_proxy"\n in content of copy task - \n gets copied as well to the file and corrupts sudoers file.
+Finally we tried with block in blockinfile module and it worked. Block content doesn't need to be quoted and if quoted, the quotes get copied as it is.
 
