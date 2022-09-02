@@ -68,4 +68,12 @@
         dest: "/home/{{ item }}/git_repos/ansible-training-environments"
         repo: "https://github.com/inderpal2406/ansible-training-environments.git"
       loop: "{{ devops_users }}"
+    - name: "Change ownership of cloned git repo dir from root to respective user."
+      file:
+        dest: "/home/{{ item }}/git_repos/ansible-training-environments"
+        state: "directory"
+        owner: "{{ item }}"
+        group: "{{ item }}"
+        recurse: "yes"
+      loop: "{{ devops_users }}"
 
