@@ -119,7 +119,7 @@ resource "aws_instance" "pvtjump" {
     Terraform = "True"
     Owner     = "Vikram Singh"
   }
-  user_data = templatefile("template-files\\pvtans-ansible-pre-requisites.sh.tftpl", { pvtans_ansible_pub_key = var.pvtans-ansible-pub-key })
+  user_data = templatefile("template-files\\pubans-ansible-pre-requisites.sh.tftpl", { pubans_ansible_pub_key = var.pubans-ansible-pub-key })
 }
 
 # Ansible server on redhat server in private subnet.
