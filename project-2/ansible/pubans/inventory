@@ -1,6 +1,7 @@
 [ubuntu]
 pubjump	
 squid-proxy	
+pvtjump
 
 [redhat]
 pubans	
@@ -12,6 +13,7 @@ squid-proxy
 pubans
 
 [pvthosts]
+pvtjump
 pvtans
 
 [pubcontroller]

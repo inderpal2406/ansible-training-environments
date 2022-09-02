@@ -10,5 +10,6 @@ ff02::3 ip6-allhosts
 10.0.0.4 pubjump
 10.0.0.5 squid-proxy
 10.0.0.6 pubans
+10.0.1.4 pvtjump
 10.0.1.5 pvtans
 
