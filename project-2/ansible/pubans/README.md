@@ -99,4 +99,7 @@ So, fourth mistake: Defaults env_keep += "ftp_proxy http_proxy https_proxy no_pr
 Finally we tried with block in blockinfile module and it worked. Block content doesn't need to be quoted and if quoted, the quotes get copied as it is.
 88. blockinfile module needs an argument "create" set to yes to create a file with content of block if the file doesn't exist.
 89. File module can be used to change ownership of an existing directory by using dest, state: "directory", owner, group, recurse arguments.
+90. Create pvtjump server.
+91. Update it in all required files and playbooks and configure it using ansible.
+92. Add playbook 07a_update_apt_cache_on_ubuntu.yml to update apt cache before pkg installation on ubuntu hosts. At times pkg installation on ubuntu hosts fail as apt cache is not updated, particularly in new hosts.
 
