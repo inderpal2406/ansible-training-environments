@@ -97,4 +97,6 @@ Third mistake: 'Defaults env_keep += "ftp_proxy http_proxy https_proxy no_proxy"
 Recreated redhat ans servers - then manually add same line with no \n and checked if it corrupts the file. Without neline char at end of line in sudoers, redhat doesn't read it properly.
 So, fourth mistake: Defaults env_keep += "ftp_proxy http_proxy https_proxy no_proxy"\n in content of copy task - \n gets copied as well to the file and corrupts sudoers file.
 Finally we tried with block in blockinfile module and it worked. Block content doesn't need to be quoted and if quoted, the quotes get copied as it is.
+88. blockinfile module needs an argument "create" set to yes to create a file with content of block if the file doesn't exist.
+89. File module can be used to change ownership of an existing directory by using dest, state: "directory", owner, group, recurse arguments.
 
