@@ -1,0 +1,13 @@
+---
+# At times for new servers installation of few pkgs fail.
+# The apt cache need to be updated on such servers to install pkgs.
+# So, this playbook is written to be executed at those times before pkg installation.
+- name: "Ensure apt cache is updated on all ubuntu hosts."
+  hosts: "ubuntu"
+  gather_facts: false
+  become: true
+  tasks:
+    - name: "Ensure to run command to update apt cache."
+      command:
+        cmd: "apt update"
+
