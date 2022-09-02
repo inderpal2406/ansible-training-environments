@@ -1,5 +1,5 @@
 ---
-- name: "Ensure pvtans host is configured with ansible."
+- name: "Ensure pvtans host is configured with ansible and other related configuration."
   hosts: "pvtans"
   gather_facts: true
   become: true
@@ -41,4 +41,11 @@
         dest: "/home/{{ item }}/git_repos/ansible-training-environments"
         repo: "https://github.com/inderpal2406/ansible-training-environments.git"
       loop: "{{ devops_users }}"
-
+    - name: "Change ownership from root to respective user for cloned git repo dir."
+      file:
+        dest: "/home/{{ item }}/git_repos/ansible-training-environments"
+        state: "directory"
+        owner: "{{ item }}"
+        group: "{{ item }}"
+        recurse: "yes"
+      loop: "{{ devops_users }}"
