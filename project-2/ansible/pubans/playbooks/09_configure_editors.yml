@@ -49,7 +49,7 @@
         dest: "/home/ansible/.vimrc"
         mode: "0644"
 - name: "Ensure .nanorc & .vimrc files are present for dev & tester users' home dir on pubjump host."
-  hosts: "pubjump"
+  hosts: "pubjump pvtjump"
   gather_facts: false
   become: true
   vars:

@@ -1,6 +1,6 @@
 ---
 - name: "Ensure developers & testers user accounts are created and configured on pubjump host."
-  hosts: "pubjump"
+  hosts: "pubjump pvtjump"
   gather_facts: false
   become: true
   vars:
