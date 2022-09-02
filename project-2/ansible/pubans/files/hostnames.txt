@@ -1,4 +1,5 @@
 pubans
 pubjump
 pvtans
+pvtjump
 squid-proxy
