@@ -105,7 +105,7 @@ resource "aws_instance" "pvtjump" {
   key_name                    = aws_key_pair.main-vpc-pvtsub-01-1a-key.key_name
   subnet_id                   = aws_subnet.main-vpc-pvtsub-01-1a.id
   associate_public_ip_address = false
-  vpc_security_group_ids      = [aws_security_group.allow-pubjump-ssh.id, aws_security_group.allow-pvtans-ssh.id]
+  vpc_security_group_ids      = [aws_security_group.allow-pubjump-ssh.id, aws_security_group.allow-pubans-ssh.id]
   private_ip                  = var.pvtjump-pvt-ip
   tenancy                     = "default"
   metadata_options {
