@@ -8,6 +8,11 @@
       package:
         name: "squid"
         state: "present"
+    - name: "Ensure squid.service is started and enabled to start on server boot."
+      service:
+        name: "squid.service"
+        state: "started"
+        enabled: "yes"
     - name: "Ensure squid.conf is updated to allow all traffic."
       lineinfile:
         path: "/etc/squid/squid.conf"
