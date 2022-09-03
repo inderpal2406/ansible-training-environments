@@ -93,3 +93,23 @@ variable "pvtans-ansible-pub-key" {
   type        = string
   description = "Public key of ansible on pvtans host."
 }
+
+variable "web-dev-pvt-ip" {
+  type        = string
+  description = "Private IP address of web-dev host."
+}
+
+variable "web-dev-hostname" {
+  type        = string
+  description = "Hostname of web-dev host."
+}
+
+variable "db-dev-pvt-ip" {
+  type        = string
+  description = "Private IP address of db-dev host."
+}
+
+variable "db-dev-hostname" {
+  type        = string
+  description = "Hostname of db-dev host."
+}
