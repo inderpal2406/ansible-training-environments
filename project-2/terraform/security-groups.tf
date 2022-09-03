@@ -190,8 +190,8 @@ resource "aws_security_group" "dev-sg" {
   vpc_id      = aws_vpc.main-vpc.id
   ingress {
     description = "Allow incoming web traffic from all hosts in dev environment."
-    from_port   = 443
-    to_port     = 443
+    from_port   = 80
+    to_port     = 80
     protocol    = "tcp"
     cidr_blocks = ["${var.main-vpc-pvtsub-02-1b-cidr}"]
   }
@@ -225,8 +225,8 @@ resource "aws_security_group" "test-sg" {
   vpc_id      = aws_vpc.main-vpc.id
   ingress {
     description = "Allow incoming web traffic from all hosts in test environment."
-    from_port   = 443
-    to_port     = 443
+    from_port   = 80
+    to_port     = 80
     protocol    = "tcp"
     cidr_blocks = ["${var.main-vpc-pvtsub-03-1c-cidr}"]
   }
@@ -260,8 +260,8 @@ resource "aws_security_group" "stg-sg" {
   vpc_id      = aws_vpc.main-vpc.id
   ingress {
     description = "Allow incoming web traffic from all hosts in staging environment."
-    from_port   = 443
-    to_port     = 443
+    from_port   = 80
+    to_port     = 80
     protocol    = "tcp"
     cidr_blocks = ["${var.main-vpc-pvtsub-04-1c-cidr}"]
   }
