@@ -102,4 +102,6 @@ Finally we tried with block in blockinfile module and it worked. Block content d
 90. Create pvtjump server.
 91. Update it in all required files and playbooks and configure it using ansible.
 92. Add playbook 07a_update_apt_cache_on_ubuntu.yml to update apt cache before pkg installation on ubuntu hosts. At times pkg installation on ubuntu hosts fail as apt cache is not updated, particularly in new hosts.
+93. If we specify regexp in lineinfile module along with insertafter, the line gets inserted after required line, but the line having regexp is deleted. Since we wanted to keep the line with regexp, we didn't use regexp argument in lineinfile module in playbook 12_increase_ssh_session_timeout.yml.
+94. Playbook 12_increase_ssh_session_timeout.yml is written to increase timeout duration for ssh session. But still the ssh session to EC2 instance gets reset after inactivity. So, this didn't prove usefule.
 
