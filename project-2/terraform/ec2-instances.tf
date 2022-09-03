@@ -95,6 +95,7 @@ resource "aws_instance" "pubans" {
     Owner     = "Vikram Singh"
   }
   user_data = templatefile("template-files\\pubans-init.sh.tftpl", { pubans_ansible_pub_key = var.pubans-ansible-pub-key })
+  # Private key of ansible user needs to be manually copied from pubjump to pubans.
 }
 
 # Ubuntu jump server in private subnet.
@@ -145,4 +146,58 @@ resource "aws_instance" "pvtans" {
     Owner     = "Vikram Singh"
   }
   user_data = templatefile("template-files\\pubans-init.sh.tftpl", { pubans_ansible_pub_key = var.pubans-ansible-pub-key })
+  # Pub key of ansible user whose pvt key is there on pubans, is being copied to authorized_keys file of ansible user on
+  # pvtans host to enable password less ssh from pubans to manage pvtans from pubans server.
+  # Separate pvt key of ansible user would be copied to pvtans via pvtjump.
+  # Pub key of this separate pvt key would be copied to all hosts in pvt subnets in pvtans-ansible-prerequisites.sh.tftpl
+  # file, so that all pvt subnet hosts can be managed by pvtans server.
+}
+
+# Ubuntu web server in dev environment.
+
+resource "aws_instance" "web-dev" {
+  ami                         = data.aws_ami.ubuntu-ami-id.id
+  instance_type               = "t2.micro"
+  key_name                    = aws_key_pair.main-vpc-pvtsub-02-1b-key.key_name
+  subnet_id                   = aws_subnet.main-vpc-pvtsub-02-1b.id
+  associate_public_ip_address = false
+  vpc_security_group_ids      = [aws_security_group.allow-pvtjump-ssh.id, aws_security_group.allow-pvtans-ssh.id, aws_security_group.dev-sg.id]
+  private_ip                  = var.web-dev-pvt-ip
+  tenancy                     = "default"
+  metadata_options {
+    http_endpoint = "enabled"
+    http_tokens   = "required"
+  }
+  tags = {
+    Name      = var.web-dev-hostname
+    Env       = "Dev"
+    App       = "Web Server"
+    Terraform = "True"
+    Owner     = "Vikram Singh"
+  }
+  user_data = templatefile("template-files\\pvtans-ansible-pre-requisites.sh.tftpl", { pvtans_ansible_pub_key = var.pvtans-ansible-pub-key })
+}
+
+# Redhat database server in dev environment.
+
+resource "aws_instance" "db-dev" {
+  ami                         = data.aws_ami.redhat-ami-id.id
+  instance_type               = "t2.micro"
+  key_name                    = aws_key_pair.main-vpc-pvtsub-02-1b-key.key_name
+  subnet_id                   = aws_subnet.main-vpc-pvtsub-02-1b.id
+  associate_public_ip_address = false
+  vpc_security_group_ids      = [aws_security_group.allow-pvtjump-ssh.id, aws_security_group.allow-pvtans-ssh.id, aws_security_group.dev-sg.id]
+  private_ip                  = var.db-dev-pvt-ip
+  tenancy                     = "default"
+  metadata_options {
+    http_endpoint = "enabled"
+    http_tokens   = "required"
+  }
+  tags = {
+    Name      = var.db-dev-hostname
+    Env       = "Dev"
+    App       = "DB Server"
+    Terraform = "True"
+    Owner     = "Vikram Singh"
+  }
 }
