@@ -35,5 +35,6 @@
 # Alternate way could be that the timezone task notifies 2 different handlers.
 # Each of these handlers has when condition based on ansible fact.
 # Both gets notified but only the one which matches ansible fact runs for that host.
+# This logic is implemented in playbook 12_increase_ssh_session_timeout.yml file.
 # In current approach, multiple handlers are notified using the listen parameter in the handler.
 

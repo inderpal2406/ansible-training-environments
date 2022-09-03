@@ -1,0 +1,28 @@
+---
+# In actual terms, this didn't resolve our issue of ssh connection to EC2 instance getting reset.
+# But still it was worth a try from playbook.
+- name: "Ensure ssh session timeout duration is increased on all hosts for all users via sshd_config file."
+  hosts: "all"
+  gather_facts: true
+  become: true
+  tasks:
+    - name: "Ensure /etc/ssh/sshd_config file is updated to increase ssh session timeout."
+      lineinfile:
+        dest: "/etc/ssh/sshd_config"
+        insertafter: "^#ClientAliveInterval 0"
+        line: "ClientAliveInterval 60"
+      notify:
+        - "Restart ssh.service on ubuntu."
+        - "Restart sshd.service on redhat."
+  handlers:
+    - name: "Restart ssh.service on ubuntu."
+      service:
+        name: "ssh.service"
+        state: "restarted"
+      when: ansible_facts["distribution"] == "Ubuntu"
+    - name: "Restart sshd.service on redhat."
+      service:
+        name: "sshd.service"
+        state: "restarted"
+      when: ansible_facts["distribution"] == "RedHat"
+
