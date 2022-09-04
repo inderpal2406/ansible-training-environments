@@ -1,0 +1,17 @@
+---
+- name: "Ensure /etc/hosts file is updated on all hosts."
+  hosts: "all"
+  gather_facts: true
+  become: true
+  tasks:
+    - name: "Copy hosts file to the ubuntu hosts."
+      copy:
+        src: "../../pubans/files/ubuntu_hosts_file"
+        dest: "/etc/hosts"
+      when: ansible_facts["distribution"] == "Ubuntu"
+    - name: "Copy hosts file to the redhat hosts."
+      copy:
+        src: "../../pubans/files/redhat_hosts_file"
+        dest: "/etc/hosts"
+      when: ansible_facts["distribution"] == "RedHat"
+
