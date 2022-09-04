@@ -1,0 +1,46 @@
+---
+- name: "Ensure devops users are configured on all hosts."
+  hosts: "all"
+  gather_facts: false
+  become: true
+  vars:
+    devops_users:
+      - { name: "inderpal", comment: "Inderpal Singh - DevOps Team" }
+      - { name: "omkar", comment: "Omkar Solaskar - DevOps Team" }
+      - { name: "sarabjeet", comment: "Sarabjeet Singh - DevOps Team" }
+  tasks:
+    - name: "Ensure devops group is created."
+      group:
+        name: "devops"
+        state: "present"
+    - name: "Ensure sudoers file for devops group is present."
+      copy:
+        content: "%devops ALL=(ALL) NOPASSWD:ALL\n"
+        dest: "/etc/sudoers.d/devops_group"
+        mode: "0440"
+    - name: "Ensure devops users are present."
+      user:
+        name: "{{ item.name }}"
+        state: "present"
+        create_home: "yes"
+        home: "/home/{{ item.name }}"
+        groups: "devops"
+        append: "yes"
+        shell: "/bin/bash"
+        comment: "{{ item.comment }}"
+      loop: "{{ devops_users }}"
+    - name: "Ensure pub ssh key of devops users is appended to respective authorized_keys file on hosts."
+      authorized_key:
+        user: "{{ item.name }}"
+        key: "{{ lookup('file', '../../pubans/files/user_pub_keys/devops/{{ item.name }}-key.pub') }}"
+        state: "present"
+      loop: "{{ devops_users }}"
+    - name: "Ensure gitconfig.j2 template file is copied to each devops users' home dir."
+      template:
+        src: "../files/gitconfig.j2"
+        dest: "/home/{{ item.name }}/.gitconfig"
+        owner: "{{ item.name }}"
+        group: "{{ item.name }}"
+        mode: "0644"
+      loop: "{{ devops_users }}"
+
