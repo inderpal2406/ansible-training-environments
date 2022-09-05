@@ -1,0 +1,23 @@
+---
+- name: "Ensure proxy server is setup fpr pkg managers on all hosts."
+  hosts: "all"
+  gather_facts: true
+  become: true
+  vars:
+    squid_proxy_hostname: "squid-proxy"
+    squid_proxy_port: "3128"
+  tasks:
+    - name: "Ensure proxy is setup for apt on ubuntu hosts."
+      copy:
+        content: |
+          Acquire::http::Proxy "http://{{ squid_proxy_hostname }}:{{ squid_proxy_port }}/";
+          Acquire::https::Proxy "http://{{ squid_proxy_hostname }}:{{ squid_proxy_port }}/";
+        dest: "/etc/apt/apt.conf.d/proxy.conf"
+      when: ansible_facts["distribution"] == "Ubuntu"
+    - name: "Ensure proxy is setup for yum on redhat hosts."
+      lineinfile:
+        dest: "/etc/yum.conf"
+        insertafter: "EOF"
+        line: "proxy=http://{{ squid_proxy_hostname }}:{{ squid_proxy_port}}/"
+      when: ansible_facts["distribution"] == "RedHat"
+
