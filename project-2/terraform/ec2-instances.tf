@@ -200,4 +200,5 @@ resource "aws_instance" "db-dev" {
     Terraform = "True"
     Owner     = "Vikram Singh"
   }
+  user_data = templatefile("template-files\\pvtans-ansible-pre-requisites.sh.tftpl", { pvtans_ansible_pub_key = var.pvtans-ansible-pub-key })
 }
