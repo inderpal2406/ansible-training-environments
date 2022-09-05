@@ -1,0 +1,32 @@
+---
+- name: "Ensure hostname, timezone & motd is setup for all hosts."
+  hosts: "all"
+  gather_facts: true
+  become: true
+  tasks:
+    - name: "Ensure hostname is setup."
+      hostname:
+        name: "{{ hostname }}"
+        use: "systemd"
+    - name: "Ensure timezone is to to IST time."
+      timezone:
+        name: "Asia/Calcutta"
+      notify:
+        - "Restart cron service on Ubuntu"
+        - "Restart cron service on RedHat"
+    - name: "Ensure motd is setup on servers."
+      template:
+        src: "../../pubans/files/motd.j2"
+        dest: "/etc/motd"
+  handlers:
+    - name: "Restart cron service on Ubuntu"
+      service:
+        name: "cron.service"
+        state: "restarted"
+      when: ansible_facts["distribution"] == "Ubuntu"
+    - name: "Restart cron service on RedHat"
+      service:
+        name: "crond.service"
+        state: "restarted"
+      when: ansible_facts["distribution"] == "RedHat"
+
