@@ -1,0 +1,37 @@
+---
+- name: "Ensure .nanorc, .vimrc files (in users' home dir) & yaml.nanorc files are present on all dev env hosts."
+  hosts: "dev"
+  gather_facts: true
+  become: true
+  vars:
+    devops:
+      - "inderpal"
+      - "omkar"
+      - "sarabjeet"
+    developers:
+      - "rakesh"
+      - "anita"
+  tasks:
+    - name: "Ensure nanorc_file is copied to each user's home dir."
+      copy:
+        src: "../../pubans/files/nanorc_file"
+        dest: "/home/{{ item }}/.nanorc"
+        owner: "{{ item }}"
+        group: "{{ item }}"
+        mode: "0644"
+      loop: "{{ devops }} + {{ developers }}"
+    - name: "Ensure vimrc_file is copied to each user's home dir."
+      copy:
+        src: "../../pubans/files/vimrc_file"
+        dest: "/home/{{ item }}/.vimrc"
+        owner: "{{ item }}"
+        group: "{{ item }}"
+        mode: "0644"
+      loop: "{{ devops }} + {{ developers }}"
+    - name: "Ensure yaml.nanorc file is copied to each host for yaml syntax highlighting in nano editor."
+      copy:
+        src: "../../pubans/files/yaml.nanorc"
+        dest: "/usr/share/nano/"
+        mode: "0644"
+      when: ansible_facts["distribution"] == "RedHat" # Ubuntu already has this file.
+

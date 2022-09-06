@@ -6,4 +6,5 @@
 6. Add playbook 05_set_proxy_for_pkg_managers.yml to setup proxy server in pkg manager conf files.
 7. Add playbook 06_apt_cache_update.yml to update apt cache in ubuntu servers when needed.
 8. Add playbook 07_install_common_pkgs.yml to install common packages on all hosts.
+9. Add playbook 08_configure_editors.yml to configure editor conf files in user home dir.
 
