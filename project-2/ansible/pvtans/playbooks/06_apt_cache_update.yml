@@ -1,0 +1,10 @@
+---
+- name: "Update apt cache on ubuntu hosts."
+  hosts: "ubuntu"
+  gather_facts: false
+  become: true
+  tasks:
+    - name: "Ensure apt cache is updated."
+      apt:
+        update_cache: "yes"
+
