@@ -1,0 +1,21 @@
+---
+- name: "Ensure proxy server is setup as env vars for all users on all hosts."
+  hosts: "all"
+  gather_facts: false
+  become: true
+  vars:
+    proxy_server: "squid-proxy"
+    proxy_port: "3128"
+  tasks:
+    - name: "Ensure bash script template is copied to /etc/profile.d dir to setup env vars for all users."
+      template:
+        src: "../../pubans/files/proxy.sh.j2"
+        dest: "/etc/profile.d/proxy.sh"
+    - name: "Ensure file is present in /etc/sudoers.d dir to keep user proxy env vars in sudo env when sudoing commands."
+      blockinfile:
+        block: |
+          Defaults env_keep += "HTTP_PROXY HTTPS_PROXY"
+        dest: "/etc/sudoers.d/keep_proxy_env_vars_in_sudo_env"
+        mode: "0440"
+        create: "yes" # Create a new file if it doesn't exist.
+

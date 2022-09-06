@@ -8,7 +8,7 @@
     proxy_port: "3128"
   tasks:
     # This file in /etc/profile.d dir would help setup env vars for all users for login sessions
-    # authenticated with key/password and login sessions via ssh command from remote host (as in ansible).
+    # authenticated with key/password and login-sessions/commands via ssh command from remote host (as in ansible).
     - name: "Copy the bash script template to /etc/profile.d/ dir to setup proxy env vars for users."
       template:
         src: "../files/proxy.sh.j2"
