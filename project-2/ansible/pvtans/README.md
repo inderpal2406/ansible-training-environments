@@ -9,4 +9,5 @@
 9. Add playbook 08_configure_editors.yml to configure editor conf files in user home dir.
 10. Add playbook 09_configure_proxy_for_all_users.yml to configure env vars with proxy server details for each user.
 11. Add playbook 10_webserver.yml to configure web server.
+12. Add playbook 11_dbserver.yml to configure db server.
 
