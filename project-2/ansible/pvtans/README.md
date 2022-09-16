@@ -8,4 +8,5 @@
 8. Add playbook 07_install_common_pkgs.yml to install common packages on all hosts.
 9. Add playbook 08_configure_editors.yml to configure editor conf files in user home dir.
 10. Add playbook 09_configure_proxy_for_all_users.yml to configure env vars with proxy server details for each user.
+11. Add playbook 10_webserver.yml to configure web server.
 
