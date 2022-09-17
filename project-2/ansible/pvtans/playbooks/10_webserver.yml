@@ -3,6 +3,9 @@
   hosts: "web"
   gather_facts: false
   become: true
+  vars:
+    proxy_server: "squid-proxy"
+    proxy_port: "3128"
   tasks:
     - name: "Ensure required packages are installed."
       package:
@@ -14,4 +17,11 @@
           - "python3-pip=22.0.2+dfsg-1"
           - "python3-mysqldb=1.4.6-1build1"
         state: "present"
+    - name: "Ensure python modules are installed using pip."
+      pip:
+        executable: "/usr/bin/pip3.10"
+        name:
+          - "flask==2.2.2"
+          - "flask-mysql==1.5.2"
+        extra_args: "--proxy=http://{{ proxy_server }}:{{ proxy_port }}"
 
