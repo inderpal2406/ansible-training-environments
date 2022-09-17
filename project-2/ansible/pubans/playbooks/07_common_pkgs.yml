@@ -5,7 +5,7 @@
   become: true
   tasks:
     # Packages from below task has same name in ubuntu & redhat distributions.
-    - name: "Ensure telnet, nano, tree, jq, whois are installed & of latest version."
+    - name: "Ensure telnet, nano, tree, jq, whois, net-tools are installed & of latest version."
       package: 
         name: 
           - "telnet"
@@ -13,6 +13,7 @@
           - "tree"
           - "jq"
           - "whois"
+          - "net-tools"         # netstat
         state: "latest"
     - name: "Ensure bind-utils, vim-enhanced are installed & latest version on RedHat hosts."
       package:
