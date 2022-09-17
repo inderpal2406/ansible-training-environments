@@ -4,7 +4,7 @@
   gather_facts: true
   become: true
   tasks:
-    - name: "Ensure telnet, nano, tree, jq, whois are installed & of latest version."
+    - name: "Ensure telnet, nano, tree, jq, whois, net-tools are installed & of latest version."
       package:
         name:
           - "telnet"
@@ -12,6 +12,7 @@
           - "tree"
           - "jq"
           - "whois"
+          - "net-tools"
         state: "latest"
     - name: "Ensure bind-utils & vim-enhanced are installed & of latest version on redhat hosts."
       package:
@@ -34,5 +35,4 @@
         dest: "/usr/bin/bat"
         state: "link"
       when: ansible_facts["distribution"] == "Ubuntu"
-
 
