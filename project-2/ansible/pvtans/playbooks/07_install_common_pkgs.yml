@@ -17,8 +17,9 @@
     - name: "Ensure bind-utils & vim-enhanced are installed & of latest version on redhat hosts."
       package:
         name:
-          - "bind-utils"  # nslookup, dig
+          - "bind-utils"  # nslookup, dig.
           - "vim-enhanced"
+          - "wget"        # needed only on redhat as ubuntu already has it.
         state: "latest"
       when: ansible_facts["distribution"] == "RedHat"
     - name: "Ensure bind9-dnsutils, vim, bat are installed & of latest version on ubuntu hosts. "
