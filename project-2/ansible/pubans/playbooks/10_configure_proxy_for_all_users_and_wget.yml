@@ -22,7 +22,7 @@
         create: "yes"	# Create a new file if it doesn't exist.
     - name: "Copy template file to /etc/wgetrc to setup proxy server for wget command for all users."
       template:
-        src: "../../pubans/files/wgetrc.j2"
+        src: "../files/wgetrc.j2"
         dest: "/etc/wgetrc"
         mode: "0644"
 
