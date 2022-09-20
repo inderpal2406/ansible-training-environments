@@ -18,4 +18,9 @@
         dest: "/etc/sudoers.d/keep_proxy_env_vars_in_sudo_env"
         mode: "0440"
         create: "yes" # Create a new file if it doesn't exist.
+    - name: "Copy template file to /etc/wgetrc to setup proxy details for wget command for all users."
+      template:
+        src: "../../pubans/files/wgetrc.j2"
+        dest: "/etc/wgetrc"
+        mode: "0644"
 
