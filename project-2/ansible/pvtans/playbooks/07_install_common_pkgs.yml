@@ -12,7 +12,7 @@
           - "tree"
           - "jq"
           - "whois"
-          - "net-tools"
+          - "net-tools"   # netstat
         state: "latest"
     - name: "Ensure bind-utils & vim-enhanced are installed & of latest version on redhat hosts."
       package:
@@ -25,7 +25,7 @@
     - name: "Ensure bind9-dnsutils, vim, bat are installed & of latest version on ubuntu hosts. "
       package:
         name:
-          - "bind9-dnsutils"
+          - "bind9-dnsutils"  # nslookup, dig.
           - "vim"
           - "bat"
         state: "latest"
