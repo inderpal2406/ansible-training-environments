@@ -6,6 +6,7 @@
   vars:
     proxy_server: "squid-proxy"
     proxy_port: "3128"
+    db_server: "db-dev"
   tasks:
     - name: "Ensure required packages are installed."
       package:
@@ -25,4 +26,12 @@
           - "flask==2.2.2"
           - "flask-mysql==1.5.2"
         extra_args: "--proxy=http://{{ proxy_server }}:{{ proxy_port }}"
+    - name: "Ensure directory to host app code is created."
+      file:
+        dest: "/app"
+        state: "directory"
+    - name: "Ensure app.py template is copied to web server."
+      template:
+        src: "../files/app.py.j2"
+        dest: "/app/app.py"
 
