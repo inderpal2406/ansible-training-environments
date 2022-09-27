@@ -4,15 +4,44 @@
   gather_facts: false
   become: true
   tasks:
+#    - name: "Ensure MySQL yum repository rpm file is downloaded."
+#      get_url:
+#        dest: "/tmp/"
+#        url: "https://repo.mysql.com/mysql80-community-release-el8-1.noarch.rpm"
+#    - name: "Ensure the downloaded rpm for MySQL yum repo is installed."
+#      yum:
+#        name: "/tmp/mysql80-community-release-el8-1.noarch.rpm"
+#        state: "present"
+#        disable_gpg_check: "yes"  
+#        # It fails if we don't disable gpg key check saying "Failed to check GPG signature."
+#        # If we locally install rpm using "sudo yum localinstall rpm_file", it works & not gives GPG error.
+#    - name: "Ensure MySQL comunity server pkg is installed."
+#      yum:
+#        name: "mysql-community-server"
+#        state: "present"
     - name: "Ensure required packages are installed."
-      package:
+      yum:
         name:
           - "mysql-server-8.0.26"   # MySQL server.
-          - "mysql-8.0.26"          # MySQL client.
+          #- "mysql-8.0.26"          # MySQL client won't be needed as mysql server is installed.
         state: "present"
     - name: "Ensure mysql server service is started and enabled."
       service:
         name: "mysqld.service"
         state: "started"
         enabled: "yes"
+    - name: "Add bind-address line in mysql server conf file."
+      lineinfile:
+        dest: "/etc/my.cnf.d/mysql-server.cnf"
+        insertafter: "^pid-file="
+        line: "bind-address={{ hostname }}"
+        state: "present"
+      notify: "Restart mysqld.service"
+  handlers:
+    - name: "Restart mysqld.service"
+      service:
+        name: "mysqld.service"
+        state: "restarted"
+# After this the mysql installation was secured manually.
+# Also, db, user, table, record creation was done manually as mentioned in notes.
 
