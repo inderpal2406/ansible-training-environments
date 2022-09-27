@@ -39,4 +39,9 @@
         src: "../files/flask_run.sh.j2"
         dest: "/app/flask_run.sh"
         mode: "0755"
-    - name: 
+    - name: "Ensure flask.service file exists on web server to run flask app as a service."
+      copy:
+        src: "../files/flask.service"
+        dest: "/lib/systemd/system/flask.service"
+        mode: "0644"
+
