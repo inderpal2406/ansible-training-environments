@@ -34,14 +34,27 @@
       template:
         src: "../files/app.py.j2"
         dest: "/app/app.py"
+      notify: "Restart flask.service"
     - name: "Ensure flask_run.sh template is copied to web server to run flask app as a service."
       template:
         src: "../files/flask_run.sh.j2"
         dest: "/app/flask_run.sh"
         mode: "0755"
+      notify: "Restart flask.service"
     - name: "Ensure flask.service file exists on web server to run flask app as a service."
       copy:
         src: "../files/flask.service"
         dest: "/lib/systemd/system/flask.service"
         mode: "0644"
+      notify: "Restart flask.service"
+    - name: "Ensure flask.service is running and enabled to start in multi user env."
+      service:
+        name: "flask.service"
+        state: "started"
+        enabled: "yes"
+  handlers:
+    - name: "Restart flask.service"
+      service:
+        name: "flask.service"
+        state: "restarted"
 
