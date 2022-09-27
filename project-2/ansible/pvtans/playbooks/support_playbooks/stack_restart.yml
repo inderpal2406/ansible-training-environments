@@ -1,0 +1,25 @@
+---
+# Bring stack down.
+- hosts: "web"
+  gather_facts: false
+  become: true
+  tasks:
+    - name: "Stop flask service on web server."
+      service: name="flask.service" state="stopped"
+     
+# Restart MySQL.
+- hosts: "db"
+  gather_facts: false
+  become: true
+  tasks:
+    - name: "Restart MySQL service on DB server."
+      service: name="mysqld.service" state="restarted"
+
+# Bring stack up.
+- hosts: "web"
+  gather_facts: false
+  become: true
+  tasks:
+    - name: "Start flask service on web server."
+      service: name="flask.service" state="started"
+
