@@ -1,0 +1,29 @@
+---
+- hosts: "web"
+  gather_facts: false
+  become: true
+  tasks:
+    - name: "Check flask service status."
+      command:
+        cmd: "systemctl status flask.service"
+    - name: "Check if flask app is listening on port 80."
+      wait_for:
+        port: "80"
+        timeout: "1"
+        host: "{{ hostname }}"  # Default is 127.0.0.1, but our app is listening on other interface.
+        state: "started"        # Check if app is listening on port 80. This verifies if port 80 is open.
+
+- hosts: "db"
+  gather_facts: false
+  become: true
+  tasks:
+    - name: "Check mysql service status."
+      command:
+        cmd: "systemctl status mysqld.service"
+    - name: "Check if mysql service is listening on port 3306."
+      wait_for:
+        port: "3306"
+        timeout: "1"
+        host: "{{ hostname }}"
+        state: "started"      # Check if port 3306 is open.
+
