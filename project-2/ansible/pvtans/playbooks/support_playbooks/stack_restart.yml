@@ -6,6 +6,8 @@
   tasks:
     - name: "Stop flask service on web server."
       service: name="flask.service" state="stopped"
+    - name: "Check if all active connections are drained on web server."
+      wait_for: port="80" host="{{ hostname }}" state="drained" # Wait until all active connections are drained.
      
 # Restart MySQL.
 - hosts: "db"
@@ -14,6 +16,8 @@
   tasks:
     - name: "Restart MySQL service on DB server."
       service: name="mysqld.service" state="restarted"
+    - name: "Check if MySQL started listening on port 3306."
+      wait_for: port="3306" host="{{ hostname }}" state="started" # Wait until mysql startes listening on 3306 port.
 
 # Bring stack up.
 - hosts: "web"
@@ -22,4 +26,6 @@
   tasks:
     - name: "Start flask service on web server."
       service: name="flask.service" state="started"
+    - name: "Check if flask app started listening on port 80."
+      wait_for: port="80" host="{{ hostname }}" state="started" # Wait until flask app starts listening on port 80.
 
