@@ -5,7 +5,7 @@ resource "aws_instance" "pubjump" {
   instance_type               = "t2.micro"
   key_name                    = aws_key_pair.main-vpc-pubsub-01-1a-key.key_name
   subnet_id                   = aws_subnet.main-vpc-pubsub-01-1a.id
-  associate_public_ip_address = true
+  associate_public_ip_address = true # Needed so that we can reach out to it from public internet.
   vpc_security_group_ids      = [aws_security_group.allow-public-ssh.id, aws_security_group.allow-pubans-ssh.id]
   private_ip                  = var.pubjump-pvt-ip
   tenancy                     = "default"
@@ -47,6 +47,37 @@ resource "aws_instance" "pubjump" {
   }
 }
 
+# Ansible server on Redhat in public subnet.
+
+resource "aws_instance" "pubans" {
+  ami                         = data.aws_ami.redhat-ami-id.id
+  instance_type               = "t2.micro"
+  key_name                    = aws_key_pair.main-vpc-pubsub-01-1a-key.key_name
+  subnet_id                   = aws_subnet.main-vpc-pubsub-01-1a.id
+  associate_public_ip_address = true # To install ansible without proxy server using user_data.
+  # We tried to not assign public IP address to ansible server by keeping the above option as false.
+  # In that case, ansible didn't get installed. So, we need public IP address to get packages installed or a proxy server.
+  # Also we tried manually to install ansible on pubans with no public IP assigned to it.
+  # Yum failed with timeout error while contacting RedHat package repositories.
+  vpc_security_group_ids      = [aws_security_group.allow-pubjump-ssh.id]
+  private_ip                  = var.pubans-pvt-ip
+  tenancy                     = "default"
+  metadata_options {
+    http_endpoint = "enabled"
+    http_tokens   = "required"
+  }
+  tags = {
+    Name      = var.pubans-hostname
+    Env       = "Management"
+    App       = "Ansible"
+    Terraform = "True"
+    Owner     = "Vikram Singh"
+  }
+  user_data = templatefile("template-files\\pubans-init.sh.tftpl", { pubans_ansible_pub_key = var.pubans-ansible-pub-key })
+  # Private key of ansible user needs to be manually copied from pubjump to pubans.
+  # Though it has a public IP but ssh is not open for public internet traffic.
+}
+
 # Squid proxy server on ubuntu.
 
 resource "aws_instance" "squid-proxy" {
@@ -70,32 +101,6 @@ resource "aws_instance" "squid-proxy" {
     Owner     = "Vikram Singh"
   }
   user_data = templatefile("template-files\\pubans-ansible-pre-requisites.sh.tftpl", { pubans_ansible_pub_key = var.pubans-ansible-pub-key })
-}
-
-# Ansible server on Redhat in public subnet.
-
-resource "aws_instance" "pubans" {
-  ami                         = data.aws_ami.redhat-ami-id.id
-  instance_type               = "t2.micro"
-  key_name                    = aws_key_pair.main-vpc-pubsub-01-1a-key.key_name
-  subnet_id                   = aws_subnet.main-vpc-pubsub-01-1a.id
-  associate_public_ip_address = true # To install ansible without proxy server using user_data.
-  vpc_security_group_ids      = [aws_security_group.allow-pubjump-ssh.id]
-  private_ip                  = var.pubans-pvt-ip
-  tenancy                     = "default"
-  metadata_options {
-    http_endpoint = "enabled"
-    http_tokens   = "required"
-  }
-  tags = {
-    Name      = var.pubans-hostname
-    Env       = "Management"
-    App       = "Ansible"
-    Terraform = "True"
-    Owner     = "Vikram Singh"
-  }
-  user_data = templatefile("template-files\\pubans-init.sh.tftpl", { pubans_ansible_pub_key = var.pubans-ansible-pub-key })
-  # Private key of ansible user needs to be manually copied from pubjump to pubans.
 }
 
 # Ubuntu jump server in private subnet.
