@@ -59,9 +59,9 @@ resource "aws_instance" "pubans" {
   # In that case, ansible didn't get installed. So, we need public IP address to get packages installed or a proxy server.
   # Also we tried manually to install ansible on pubans with no public IP assigned to it.
   # Yum failed with timeout error while contacting RedHat package repositories.
-  vpc_security_group_ids      = [aws_security_group.allow-pubjump-ssh.id]
-  private_ip                  = var.pubans-pvt-ip
-  tenancy                     = "default"
+  vpc_security_group_ids = [aws_security_group.allow-pubjump-ssh.id]
+  private_ip             = var.pubans-pvt-ip
+  tenancy                = "default"
   metadata_options {
     http_endpoint = "enabled"
     http_tokens   = "required"
@@ -207,3 +207,30 @@ resource "aws_instance" "db-dev" {
   }
   user_data = templatefile("template-files\\pvtans-ansible-pre-requisites.sh.tftpl", { pvtans_ansible_pub_key = var.pvtans-ansible-pub-key })
 }
+
+/*
+# Test redhat instance to install ansible latest version.
+
+resource "aws_instance" "testans" {
+  ami                         = data.aws_ami.redhat-ami-id.id
+  instance_type               = "t2.micro"
+  key_name                    = aws_key_pair.main-vpc-pubsub-01-1a-key.key_name
+  subnet_id                   = aws_subnet.main-vpc-pubsub-01-1a.id
+  associate_public_ip_address = true
+  vpc_security_group_ids      = [aws_security_group.allow-public-ssh.id]
+  private_ip                  = "10.0.0.7"
+  tenancy                     = "default"
+  metadata_options {
+    http_endpoint = "enabled"
+    http_tokens   = "required"
+  }
+  tags = {
+    Name      = "testans"
+    Env       = "Management"
+    App       = "Ansible"
+    Terraform = "True"
+    Owner     = "Vikram Singh"
+  }
+  user_data = templatefile("template-files\\pubans-ansible-pre-requisites.sh.tftpl", { pubans_ansible_pub_key = var.pubans-ansible-pub-key })
+}
+*/
