@@ -1,0 +1,25 @@
+---
+- name: "Ensure {{ dev_group }} group for dev users is present."
+  ansible.builtin.group:
+    name: "{{ dev_group }}"
+    state: "present"
+
+- name: "Ensure dev user accounts are present and member of {{ dev_group }} group."
+  ansible.builtin.user:
+    name: "{{ item.name }}"
+    comment: "{{ item.comment }}"
+    create_home: "yes"
+    groups: "{{ dev_group }}"
+    append: "yes"
+    home: "/home/{{ item.name }}"
+    shell: "/bin/bash"
+    state: "present"
+  loop: "{{ dev_users }}"
+
+- name: "Ensure public ssh key for dev user accounts is copied to respective authorized_keys file."
+  authorized_key:
+    user: "{{ item.name }}"
+    key: "{{ item.pub_key }}"
+    state: "present"
+  loop: "{{ dev_users }}"
+

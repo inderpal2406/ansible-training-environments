@@ -1,0 +1,15 @@
+---
+- name: "Restart cron.service on ubuntu servers."
+  ansible.builtin.service:
+    name: "cron.service"
+    state: "restarted"
+  listen: "Restart CRON service."
+  when: ansible_distribution == "Ubuntu"
+
+- name: "Restart crond.service on redhat servers."
+  ansible.builtin.service:
+    name: "crond.service"
+    state: "restarted"
+  listen: "Restart CRON service."
+  when: ansible_distribution == "RedHat"
+

@@ -1,0 +1,55 @@
+
+hosts_file_initial_data_redhat: |
+  127.0.0.1   localhost localhost.localdomain localhost4 localhost4.localdomain4
+  ::1         localhost localhost.localdomain localhost6 localhost6.localdomain6
+
+hosts_file_initial_data_ubuntu: |
+  127.0.0.1 localhost
+  
+  # The following lines are desirable for IPv6 capable hosts
+  ::1 ip6-localhost ip6-loopback
+  fe00::0 ip6-localnet
+  ff00::0 ip6-mcastprefix
+  ff02::1 ip6-allnodes
+  ff02::2 ip6-allrouters
+  ff02::3 ip6-allhosts
+
+hosts_file_entries: |
+  10.0.0.4 pubjump
+  10.0.0.5 squid-proxy
+  10.0.0.6 pubans
+  10.0.1.4 pvtjump
+  10.0.1.5 pvtans
+
+ansible_user: ansible
+
+ansible_user_for_git:
+  - { name: "ansible" }
+
+ansible_connection: ssh
+
+timezone: Asia/Calcutta
+
+devops_group: devops
+
+devops_users:
+  - { name: "inderpal", comment: "Inderpal Singh - DevOps Team", pub_key: "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDDP3/hhSvy+Ss47i4h3bc2hMU1WgxfmSQ+joxuW9xy1i2X6ix59CdmvTFerPIrBzQXynboGf0h/6bJRaZSD2LNudQ4okOx25Oin56llnC6CZ1O4H5P66ezPr4/iHfGSQc03w1XWMIt5u1DpCA7VdlREomvKIbFrb33DFm+jKAmoEIIffXh0mzuU7y+dRyZOhIHa7Mn2+DnyMI2cdWCEdabjhlP+XM4T6aOHs+3UNseyg1wSo9+iu9B/9ZtXLfsVYpDhd41PooUVhvIiV2sYQDpGlyZhmRVe3Ff7bqMWflMCFDX3GMZFlmikUW7VnF/KmJ4xr6JD7JtROzKaCwQPQ8p inderpal@CG-Laptop" }
+  - { name: "omkar", comment: "Omkar Solaskar - DevOps Team", pub_key: "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCpKVUWswc3rNjvi6vBZd650K1Un/SI0AiQ+TQ/RGG5Wbd5LsRUXlGDiRAn/2hLWa4RzmR4VeCLIxvkty4GKWAL5L+s18hxboVmDfAFgauBewQ7kr+ytZHC+kE0Ex82buWjZq8vKlDcsm9pBEZnr+t6bEMQjWhLHzUSELg1yi4DBXr96do0EVIv3RQxVF5YTaNYalHk2HHmE+k2u0HdKpjAj9uMHHp6gsJF9BgpsdDFjBUIGguLRzN3/yXlJLlg/AcQtxUtxaYkM/KtcES4A4MUE9YdyrmeWnP+eQ+WFIYDP7omsHdG2fl6PGbqh/2e5+SLjczXRnbex/3F0KpQa6PT omkar@CG-Laptop" }
+  - { name: "sarabjeet", comment: "Sarabjeet Singh - DevOps Team", pub_key: "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC/6UNyLDNmEfF2zmPSqW+1EzKusCM4FxYVAs0Hax5fM5AbUuaUxvBOgAcstYNyXIvJ9bASVANwznVkn3OjufdgRSp9Km6b1gSaJz3guNfa++0xjs2vaxOW0tGb7xzCgXAQ2u9HGjmz6v14ULScVQc7wrcfZWoy4ItIeG4wxnqkw+TLb4RXVQb5HTNzAXrPIwar4debBroo/GBzlptblJhXYSHtB49XMyq3zIXVUUUwJJb0k8fB6B7kcGxtsmrQQuk9alFeGdQ3g3wPe6DNs+yxAo7vYrcNm2MaJr5djS7pGYg17aMgrIw0jSFpdJejEEV1lHvV6Gy73VQnazqQ5fcp sarabjeet@CG-Laptop" }
+
+dev_group: dev
+
+dev_users:
+  - { name: "rakesh", comment: "Rakesh Singh - Developer Team", pub_key: "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCkUrSPuT19AjlK6DJC9ePIprauCpd7NOCUOYC2BWtGVvE+QaxInWgBjTO7QVmdGb4pizvjxq7LPzNKgEhR5IGWCken+/HcvQZM/hm0GhZOIeYJoziT43pcydmUjMFJr7xWhCOsjVCrJhoE2DZZ0jJ85CEmrzI5cUskhm9hqermbWXNgQvuhCO1fA92CI+aGRzFbK/B0LClCnO74VC4OUP7fdjrf57ERV2mVONYZz212CjzVJ3FPzK2gk86BdmKsUu/J91DXKuyKmBwMrS4z905hfzOE/c4LqBnwxs4paBfPdpzTF7ndX1Znq9klU/NvtsJBUTc5pVNbwY6J9GAKIPH rakesh@CG-Laptop" }
+  - { name: "anita", comment: "Anita Kumar - Developer Team", pub_key: "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDIGbDAjgLedjtSQ6Gukn0aBYI3qsPBXqCXNK0TnCFm1TwP5si8It1Hm3/NA2YDSPQMBlZZ7umpfXR7S0TeuGx7Yq0Z2Q3wGAOWrh6p8GdROimxLCepi0oUV/EeSEPbj9hD4/QUFwTw7ZGywkMWGKNqqomHq1V8Mp9glYUD108/V2iVulniFOdinnfm7GqNaPCVj0K87ssZTtYudJGRrCnQkVWV+B17y933iHQ8VuMYH7mbAQGY9hk5q1IZdpY6DZFwh5P8Q5y5zK99JmCsfUkMKLkzFIU039eL/ZkLjIOU/EdFw6wOLzv104TF06r3hkMN6t1JajxKPaMK7I/zM+zD anita@CG-Laptop" }
+
+test_group: test
+
+test_users:
+  - { name: "pooja", comment: "Pooja Hegde - Testing Team", pub_key: "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCjjxvvPQ3zDPFK0vtW2SGUaRP56sqDIXcuz77CTIRD/LUTIYvV4t//Y36XKe7tNHJ3xeTR87CyYE4C7hESKj+2AAg7r2NHqOCHivG4RWsPV8IjczrLTd+90CxbQe98ROBgC/V3PuPjusk2WS2hrk91wGsXQAc0rb1p69ZpaxG5bsjFpdsYbDMqvUUXFM1oq1Tx2ohUCCSd9fDPynIMKoEg1PV6V5XEWfNAd3tKw4QP39FfAhIwr3nTI0lrln4gkW8ov3X9CWJ2uUEcAO/tdlfogbGAR3rtLZXZOCbH54WCCUxzUUD7SQaJS4OwBCQSaRUdElxtTA+EL1BSTrcNJlH9 pooja@CG-Laptop" }
+  - { name: "ashutosh", comment: "Ashutosh Gowarikar - Testing Team", pub_key: "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC30Cu7TbpdG1XeqaCLFAIJ/MA2hLGjMy47kkvlJWTuFRSD6+2EXOMW2j6GK9HGrSGVrLlH+f9aS7E9lXSyc9T0M5emKdhlGyKv6m+YSChna3QWsCKdJxig56pMlD434hnadWOSKjeKM0hwaaJxHf7r/ugWiwzXxQpsuGC3ydD2WEPM3N1IxHqm3eo5fetj9Z0IVKp2ZLOlW/P88Jf1OezYX6KVuSWvT7/1ehHAlnYu/Oyj9ft3dnGKlFDLHGkVq2fQVOOTbGf90UHdfNPfK5KYTlW6kX4SB0J3C387p3Z/L868Zntfamhy0TriwW3CeZPrXJQA/xHX3Wki4x2w0rx5 ashutosh@CG-Laptop" }
+
+proxy_server: squid-proxy
+
+proxy_port: 3128
+

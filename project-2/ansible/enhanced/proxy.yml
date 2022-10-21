@@ -1,0 +1,8 @@
+---
+- name: "Setup squid-proxy server."
+  hosts: "squid-proxy"
+  gather_facts: false
+  become: true
+  roles:
+    - squid
+

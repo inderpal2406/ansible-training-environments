@@ -1,0 +1,7 @@
+---
+- import_playbook: do_initial_config.yml
+- import_playbook: proxy.yml
+- import_playbook: setup_users.yml
+- import_playbook: setup_proxy_env.yml
+- import_playbook: setup_git.yml
+

@@ -1,0 +1,8 @@
+---
+- name: "Ensure proxy server details are setup in env on the servers."
+  hosts: "all"
+  gather_facts: true
+  become: true
+  roles:
+    - proxy_env
+

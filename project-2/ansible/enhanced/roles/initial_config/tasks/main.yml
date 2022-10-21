@@ -1,0 +1,17 @@
+---
+- name: "Ensure hostname is setup for the servers."
+  ansible.builtin.hostname:
+    name: "{{ hostname }}"
+    use: "systemd"
+
+- name: "Ensure motd is setup on the servers."
+  ansible.builtin.template:
+    src: "motd.j2"
+    dest: "/etc/motd"
+
+- name: "Ensure timezone is set to IST on the servers."
+  #community.general.timezone:
+  timezone:
+    name: "{{ timezone }}"
+  notify: "Restart CRON service."
+

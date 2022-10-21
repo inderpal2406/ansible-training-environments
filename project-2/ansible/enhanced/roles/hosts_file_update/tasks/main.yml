@@ -1,0 +1,16 @@
+---
+- name: "Set fact for hosts file update for Ubuntu server."
+  ansible.builtin.set_fact:
+    hosts_file_initial_data: "{{ hosts_file_initial_data_ubuntu }}"
+  when: ansible_distribution == "Ubuntu"
+
+- name: "Set fact for hosts file update for RedHat server."
+  ansible.builtin.set_fact:
+    hosts_file_initial_data: "{{ hosts_file_initial_data_redhat }}"
+  when: ansible_distribution == "RedHat"
+
+- name: "Ensure hosts file is up-to-date on the servers."
+  template:
+    src: "hosts.j2"
+    dest: "/etc/hosts"
+  

@@ -1,0 +1,3 @@
+hostname: pubans
+ansible_connection: local
+

@@ -1,0 +1,25 @@
+---
+- name: "Ensure {{ test_group }} group for testers is present."
+  ansible.builtin.group:
+    name: "{{ test_group }}"
+    state: "present"
+
+- name: "Ensure tester user accounts are present and member of {{ test_group }} group."
+  ansible.builtin.user:
+    name: "{{ item.name }}"
+    comment: "{{ item.comment }}"
+    create_home: "yes"
+    groups: "{{ test_group }}"
+    append: "yes"
+    home: "/home/{{ item.name }}"
+    shell: "/bin/bash"
+    state: "present"
+  loop: "{{ test_users }}"
+
+- name: "Ensure public ssh key for testers is copied to respective authorized_keys file."
+  authorized_key:
+    user: "{{ item.name }}"
+    key: "{{ item.pub_key }}"
+    state: "present"
+  loop: "{{ test_users }}"
+

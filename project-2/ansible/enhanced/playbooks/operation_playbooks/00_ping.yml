@@ -1,0 +1,8 @@
+---
+- name: "Test ansible ping to hosts"
+  hosts: "all"
+  gather_facts: false
+  tasks:
+    - name: "Ensure ansible ping to hosts works."
+      ping:
+

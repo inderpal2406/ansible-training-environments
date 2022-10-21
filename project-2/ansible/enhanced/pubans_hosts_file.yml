@@ -1,0 +1,8 @@
+---
+- name: "Play to update hosts file on pubans server."
+  hosts: "10.0.0.6"
+  gather_facts: true
+  become: true
+  roles:
+    - hosts_file_update
+

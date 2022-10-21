@@ -1,0 +1,37 @@
+---
+- name: "Ensure yum.conf has proxy server details on RedHat servers."
+  ansible.builtin.lineinfile:
+    dest: "/etc/yum.conf"
+    insertafter: "EOF"
+    line: "proxy=http://{{ proxy_server }}:{{ proxy_port }}/"
+  when: ansible_distribution == "RedHat"
+
+- name: "Ensure apt-get has conf file with proxy server details on Ubuntu servers."
+  ansible.builtin.copy:
+    content: |
+      Acquire::http::Proxy "http://{{ proxy_server }}:{{ proxy_port }}/";
+      Acquire::https::Proxy "http://{{ proxy_server }}:{{ proxy_port }}/";
+    dest: "/etc/apt/apt.conf.d/proxy.conf"
+  when: ansible_distribution == "Ubuntu"
+
+# The file in /etc/profile.d dir would help setup env vars for all users for login sessions
+# authenticated with key/password and login-sessions/commands via ssh command from remote host (as in ansible).
+- name: "Ensure bash script is templated to /etc/profile.d to setup proxy env vars for users."
+  ansible.builtin.template:
+    src: "proxy.sh.j2"
+    dest: "/etc/profile.d/proxy.sh"
+
+- name: "Ensure file is created in /etc/sudoers.d to keep proxy env vars in sudo env while sudoing commands."
+  ansible.builtin.blockinfile:
+    block: |
+      Defaults env_keep += "HTTP_PROXY HTTPS_PROXY"
+    dest: "/etc/sudoers.d/keep_proxy_env_vars_in_sudo_env"
+    mode: "0440"
+    create: "yes"  # Create a new file if it doesn't exist.
+
+- name: "Ensure /etc/wgetrc is templated to setup proxy server for wget command for all users."
+  ansible.builtin.template:
+    src: "wgetrc.j2"
+    dest: "/etc/wgetrc"
+    mode: "0644"
+

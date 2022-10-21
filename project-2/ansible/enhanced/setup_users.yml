@@ -1,0 +1,16 @@
+---
+- name: "Ensure devops users are setup on all servers."
+  hosts: "all"
+  gather_facts: false
+  become: true
+  roles:
+    - devops_users
+
+- name: "Ensure dev & tester users are setup on jump servers."
+  hosts: "pubjump pvtjump"
+  gather_facts: false
+  become: true
+  roles:
+    - dev_users
+    - test_users
+

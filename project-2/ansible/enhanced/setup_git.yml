@@ -1,0 +1,8 @@
+---
+- name: "Ensure git is installed and git config for users is updated."
+  hosts: "pubans pvtans"
+  gather_facts: false
+  become: true
+  roles:
+    - { role: "git", users: "{{ devops_users }} + {{ ansible_user_for_git }}" } 
+

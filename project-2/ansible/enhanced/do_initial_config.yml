@@ -1,0 +1,9 @@
+---
+- name: "Ensure hosts file, hostname, timezone, motd are setup on the servers."
+  hosts: "all"
+  gather_facts: true	# To restart cron/crond service as per the distribution when timezone is updated.
+  become: true
+  roles:
+    - hosts_file_update
+    - initial_config
+

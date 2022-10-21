@@ -1,0 +1,31 @@
+---
+- name: "Ensure {{ devops_group }} group for devops users is present."
+  ansible.builtin.group:
+    name: "{{ devops_group }}"
+    state: "present"
+
+- name: "Ensure {{ devops_group }} group is given sudo privileges on the servers."
+  ansible.builtin.copy:
+    content: "%{{ devops_group }} ALL=(ALL) NOPASSWD:ALL\n"
+    dest: "/etc/sudoers.d/{{ devops_group }}_group"
+    mode: "0440"
+
+- name: "Ensure users for devops team members are present and member of {{ devops_group }} group."
+  ansible.builtin.user:
+    name: "{{ item.name }}"
+    comment: "{{ item.comment }}"
+    create_home: "yes"
+    groups: "{{ devops_group }}"
+    append: "yes"
+    home: "/home/{{ item.name }}"
+    shell: "/bin/bash"
+    state: "present"
+  loop: "{{ devops_users }}"
+
+- name: "Ensure public ssh key for devops team members is copied to respective authorized_keys file."
+  authorized_key:
+    user: "{{ item.name }}"
+    key: "{{ item.pub_key }}"
+    state: "present"
+  loop: "{{ devops_users }}"
+
