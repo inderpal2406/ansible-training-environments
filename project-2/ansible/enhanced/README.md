@@ -70,4 +70,10 @@ Changes on 15 Oct, 2022:
 55. Created role git.
 56. Create playbook setup_git.yml which uses role git.
 57. Update site.yml to import setup_git.yml playbook.
+58. Needed .gitconfig file for ansible user on pubans and pvtans.
+59. Tried to pass it as var in setup_git.yml - - { role: "git", users: "{{ devops_users }} + name: ansible" }
+60. This didn't work as anisble gave an error that it expected a list/dict.
+61. Created a var ansible_user_for_git in group_vars/all with value as a list having name as a key.
+62. Then updated setup_git.yml with - { role: "git", users: "{{ devops_users }} + {{ ansible_user_for_git }}" }
+63. This worked.
 
