@@ -166,9 +166,14 @@ resource "aws_instance" "web-dev" {
   key_name                    = aws_key_pair.main-vpc-pvtsub-02-1b-key.key_name
   subnet_id                   = aws_subnet.main-vpc-pvtsub-02-1b.id
   associate_public_ip_address = false
-  vpc_security_group_ids      = [aws_security_group.allow-pvtjump-ssh.id, aws_security_group.allow-pvtans-ssh.id, aws_security_group.dev-sg.id]
-  private_ip                  = var.web-dev-pvt-ip
-  tenancy                     = "default"
+  # We decided to manage remaining pvt subnet hosts using pvtans ansible server.
+  # In enhanced playbooks, then will need to maintain separate inventory for pvtans and modify ansible.cfg everytime separately for both ans servers.
+  # Hence, decided to manage all hosts using one ansible server which is pubans.
+  # Hence, below security groups are commented and new ones are added in line below to allow incoming traffic from pubans.
+  #vpc_security_group_ids      = [aws_security_group.allow-pvtjump-ssh.id, aws_security_group.allow-pvtans-ssh.id, aws_security_group.dev-sg.id]
+  vpc_security_group_ids = [aws_security_group.allow-pvtjump-ssh.id, aws_security_group.allow-pubans-ssh.id, aws_security_group.dev-sg.id]
+  private_ip             = var.web-dev-pvt-ip
+  tenancy                = "default"
   metadata_options {
     http_endpoint = "enabled"
     http_tokens   = "required"
@@ -180,7 +185,10 @@ resource "aws_instance" "web-dev" {
     Terraform = "True"
     Owner     = "Vikram Singh"
   }
-  user_data = templatefile("template-files\\pvtans-ansible-pre-requisites.sh.tftpl", { pvtans_ansible_pub_key = var.pvtans-ansible-pub-key })
+  # Comment below user_data and add new user_data to enable server management using pubans server.
+  #user_data = templatefile("template-files\\pvtans-ansible-pre-requisites.sh.tftpl", { pvtans_ansible_pub_key = var.pvtans-ansible-pub-key })
+  user_data = templatefile("template-files\\pubans-ansible-pre-requisites.sh.tftpl", { pubans_ansible_pub_key = var.pubans-ansible-pub-key })
+  # Same above changes for management through pubans are made in hosts below.
 }
 
 # Redhat database server in dev environment.
@@ -191,9 +199,10 @@ resource "aws_instance" "db-dev" {
   key_name                    = aws_key_pair.main-vpc-pvtsub-02-1b-key.key_name
   subnet_id                   = aws_subnet.main-vpc-pvtsub-02-1b.id
   associate_public_ip_address = false
-  vpc_security_group_ids      = [aws_security_group.allow-pvtjump-ssh.id, aws_security_group.allow-pvtans-ssh.id, aws_security_group.dev-sg.id]
-  private_ip                  = var.db-dev-pvt-ip
-  tenancy                     = "default"
+  #vpc_security_group_ids      = [aws_security_group.allow-pvtjump-ssh.id, aws_security_group.allow-pvtans-ssh.id, aws_security_group.dev-sg.id]
+  vpc_security_group_ids = [aws_security_group.allow-pvtjump-ssh.id, aws_security_group.allow-pubans-ssh.id, aws_security_group.dev-sg.id]
+  private_ip             = var.db-dev-pvt-ip
+  tenancy                = "default"
   metadata_options {
     http_endpoint = "enabled"
     http_tokens   = "required"
@@ -205,7 +214,8 @@ resource "aws_instance" "db-dev" {
     Terraform = "True"
     Owner     = "Vikram Singh"
   }
-  user_data = templatefile("template-files\\pvtans-ansible-pre-requisites.sh.tftpl", { pvtans_ansible_pub_key = var.pvtans-ansible-pub-key })
+  #user_data = templatefile("template-files\\pvtans-ansible-pre-requisites.sh.tftpl", { pvtans_ansible_pub_key = var.pvtans-ansible-pub-key })
+  user_data = templatefile("template-files\\pubans-ansible-pre-requisites.sh.tftpl", { pubans_ansible_pub_key = var.pubans-ansible-pub-key })
 }
 
 /*
