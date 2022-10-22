@@ -1,0 +1,35 @@
+---
+- name: "Ensure bind-utils, wget packages are installed and of latest version on RedHat."
+  ansible.builtin.yum:
+    name:
+      - "bind-utils"  # nslookup, dig.
+      - "wget"        # Ubuntu already has wget.
+    state: "latest"
+  when: ansible_distribution == "RedHat" 
+
+- name: "Ensure bind9-dnsutils, bat packages are installed and of latest version on Ubuntu."
+  ansible.builtin.apt:
+    update_cache: "yes"
+    name:
+      - "bind9-dnsutils"  # nslookup, dig.
+      - "bat"             # bat is not easily available on RedHat.
+    state: "latest"
+  when: ansible_distribution == "Ubuntu"
+
+- name: "Ensure bat symlink is present and pointing to batcat on Ubuntu."
+  ansible.builtin.file:
+    src: "/usr/bin/batcat"  # bat gets installed as batcat due to package name issues. More info on bat official git repo
+    dest: "/usr/bin/bat"    # and other previous files.
+    state: "link"
+  when: ansible_distribution == "Ubuntu"
+
+- name: "Ensure telnel, tree, jq, whois, net-tools packages are installed and of latest version on all hosts."
+  ansible.builtin.package:
+    name:
+      - "telnet"
+      - "tree"
+      - "jq"
+      - "whois"
+      - "net-tools"
+    state: "latest"
+

@@ -1,0 +1,8 @@
+---
+- name: "Ensure utility packages are installed on all servers."
+  hosts: "all"
+  gather_facts: true
+  become: true
+  roles:
+    - { role: "utilities" }
+

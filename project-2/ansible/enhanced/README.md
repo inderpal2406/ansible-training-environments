@@ -78,4 +78,6 @@ Changes on 15 Oct, 2022:
 63. This worked.
 64. Created role editors.
 65. Created setup_editors.yml playbook and included it in site.yml.
+66. Create role named utilities to install common utility packages.
+67. Create playbook setup_utilities.yml playbook and import it in site.yml.
 
