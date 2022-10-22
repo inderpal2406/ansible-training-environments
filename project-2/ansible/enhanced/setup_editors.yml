@@ -1,0 +1,15 @@
+---
+- name: "Ensure editors are configured for the devops & ansible user on all hosts."
+  hosts: "all"
+  gather_facts: true
+  become: true
+  roles:
+    - { role: editors, users: "{{ devops_users }} + {{ ansible_user_for_git }}" }
+
+- name: "Ensure editors are configured for dev & test users on required hosts."
+  hosts: "pubjump pvtjump"
+  gather_facts: true
+  become: true
+  roles:
+    - { role: editors, users: "{{ dev_users }} + {{ test_users }}"}
+

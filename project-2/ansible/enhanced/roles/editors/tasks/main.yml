@@ -1,0 +1,44 @@
+---
+- name: "Ensure nano is installed and is of latest version."
+  ansible.builtin.package:
+    name: "nano"
+    state: "latest"
+
+- name: "Ensure vim is installed and is of latest version on Ubuntu."
+  ansible.builtin.apt:
+    update_cache: "yes"
+    name: "vim"
+    state: "latest"
+  when: ansible_distribution == "Ubuntu"
+
+- name: "Ensure vim-enhanced is installed and is of latest version on RedHat."
+  ansible.builtin.yum:
+    name: "vim-enhanced"
+    state: "latest"
+  when: ansible_distribution == "RedHat"
+
+- name: "Ensure yaml.nanorc is present for YAML syntax highlighting in nano."
+  ansible.builtin.copy:
+    src: "yaml.nanorc"
+    dest: "/usr/share/nano/"
+    mode: "0644"
+  when: ansible_distribution == "RedHat"  # Ubuntu already has this file.
+
+- name: "Ensure .nanorc file is present in user home dir."
+  ansible.builtin.copy:
+    src: "nanorc_file"
+    dest: "/home/{{ item.name }}/.nanorc"
+    owner: "{{ item.name }}"
+    group: "{{ item.name }}"
+    mode: "0644"
+  loop: "{{ users }}"
+
+- name: "Ensure .vimrc file is present in user home dir."
+  ansible.builtin.copy:
+    src: "vimrc_file"
+    dest: "/home/{{ item.name }}/.vimrc"
+    owner: "{{ item.name }}"
+    group: "{{ item.name }}"
+    mode: "0644"
+  loop: "{{ users }}"
+

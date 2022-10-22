@@ -76,4 +76,6 @@ Changes on 15 Oct, 2022:
 61. Created a var ansible_user_for_git in group_vars/all with value as a list having name as a key.
 62. Then updated setup_git.yml with - { role: "git", users: "{{ devops_users }} + {{ ansible_user_for_git }}" }
 63. This worked.
+64. Created role editors.
+65. Created setup_editors.yml playbook and included it in site.yml.
 

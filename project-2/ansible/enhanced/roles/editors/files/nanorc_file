@@ -1,0 +1,7 @@
+# autoindent will automatically bring cursor to indentation level of last line.
+set autoindent
+# Set tab size to 2 spaces. Default is 8 spaces.
+set tabsize 2
+# Convert tab to spaces
+set tabtospaces
+
