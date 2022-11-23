@@ -11,7 +11,9 @@ chown -R ansible:ansible /home/ansible/.ssh
 chmod 700 /home/ansible/.ssh
 chmod 600 /home/ansible/.ssh/authorized_keys
 # Redhat doesn't have python by default. But installing ansible using yum,
-# installs a functional version of python as well.
+# installs a functional version of python as well. We need to check where this python executable gets installed.
+# But when we check "ansible --version" output, it shows python version as 3.6.8 being used.
+# Going forward we'll first install python 3 and then ansible.
 yum install ansible -y
 mkdir -p /home/ansible/git_repos/
 sudo chown ansible:ansible /home/ansible/git_repos
