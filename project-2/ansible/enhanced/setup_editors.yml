@@ -13,3 +13,10 @@
   roles:
     - { role: editors, users: "{{ dev_users }} + {{ test_users }}"}
 
+- name: "Ensure editors are configured for dev users on dev env servers."
+  hosts: "dev"
+  gather_facts: true
+  become: true
+  roles:
+    - { role: editors, users: "{{ dev_users }}" }
+
