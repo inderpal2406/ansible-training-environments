@@ -14,3 +14,10 @@
     - dev_users
     - test_users
 
+- name: "Ensure dev users are setup on dev environment servers."
+  hosts: "dev"
+  gather_facts: false
+  become: true
+  roles:
+    - dev_users
+
