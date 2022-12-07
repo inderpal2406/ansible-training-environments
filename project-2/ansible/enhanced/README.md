@@ -81,3 +81,35 @@ Changes on 15 Oct, 2022:
 66. Create role named utilities to install common utility packages.
 67. Create playbook setup_utilities.yml playbook and import it in site.yml.
 
+Changes on 7 Dec, 2022: Migration from CG laptop to RSA workspace.
+1. Created new AWS account.
+2. Created IAM user in it with programmatic keys and required admin policy.
+3. Downloaded those keys.
+4. Installed python and aws-cli on host machine with VS code.
+5. Configured aws profile in aws-cli with new keys.
+6. Updated aws profile in terraform vars.
+7. Got files mentioned in .gitignore file for this repo from CG laptop to workspace.
+8. Executed terraform to provision resources.
+9. SSH didn't work from behind the proxy. Couldn't copy pvt ssh key for ansible user to pubjump using terraform executioners.
+10. Manually did so.
+11. SSH also didn;t work from behind the proxy to pubjump.
+12. Manually took ssh somehow.
+13. Manually copied ansible pvt ssh key to pubjump and from pubjump to pubans.
+14. SSH to pubjump, then to pubans.
+15. CLoned this repo there.
+16. Updated ansible.cfg to use initial inventory file.
+17. Manually ssh to pubans from pubans to accept key for first time.
+18. Executed pubans_hosts_file.yml playbook.
+19. Updated ansible.cfg to use original inventory.
+20. Executed bash script to ssh to all hosts from inventory for first time to accept key.
+21. Executed site.yml playbook.
+22. Created db-dev and web-dev servers using terraform.
+21. Updated these servers in group_vars/all file in hosts file template var.
+22. Changed inventory to initial inv in ansible.cfg.
+22. Executed pubans_hosts_file.yml playbook.
+23. Updated these hosts in actual inventory.
+24. Executed bash script to ssh to all hosts again from actual inv file to accept key for new servers.
+25. Updated ansible.cfg with actual inv.
+26. Created vars file in host_vars dir for new servers.
+27. Read through all playbooks from site.yml file within the roles to check which playbook/role needs to be executed for new servers.
+
