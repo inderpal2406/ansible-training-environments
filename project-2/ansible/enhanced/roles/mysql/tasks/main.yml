@@ -1,0 +1,20 @@
+---
+- name: "Ensure MySQL is installed."
+  ansible.builtin.yum:
+    name: "mysql-server-8.0.26"
+    state: "present"
+
+- name: "Ensure bind-address line in mysql server conf file is updated."
+  ansible.builtin.lineinfile:
+    dest: "/etc/my.cnf.d/mysql-server.cnf"
+    insertafter: "^pid-file="
+    line: "bind-address={{ hostname }}"
+    state: "present"
+  notify: "Restart mysqld.service"
+
+- name: "Ensure MySQl service is started and enabled."
+  ansible.builtin.service:
+    name: "mysqld.service"
+    state: "started"
+    enabled: "yes"
+
