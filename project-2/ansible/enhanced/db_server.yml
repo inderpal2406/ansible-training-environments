@@ -1,0 +1,8 @@
+---
+- name: "Ensure MySQL is installed and configured on DB server."
+  hosts: "db-dev"
+  gather_facts: false
+  become: true
+  roles:
+    - { role: "mysql" }
+
