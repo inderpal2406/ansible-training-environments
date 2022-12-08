@@ -112,4 +112,11 @@ Changes on 7 Dec, 2022: Migration from CG laptop to RSA workspace.
 25. Updated ansible.cfg with actual inv.
 26. Created vars file in host_vars dir for new servers.
 27. Read through all playbooks from site.yml file within the roles to check which playbook/role needs to be executed for new servers.
-
+28. Update required playbooks from site.yml.
+29. Execute site.yml and confiure new servers as per existing playbooks.
+30. Add db_server.yml in site.yml.
+31. Create db_server.yml to consume mysql role.
+32. create mysql role.
+33. Execute site.yml after syntax check.
+34. Execute mysql_secure_installation command on db-dev server (we did it using non-root) user, to secure MySQL installation.
+35. 
