@@ -119,4 +119,7 @@ Changes on 7 Dec, 2022: Migration from CG laptop to RSA workspace.
 32. create mysql role.
 33. Execute site.yml after syntax check.
 34. Execute mysql_secure_installation command on db-dev server (we did it using non-root) user, to secure MySQL installation.
-35. 
+35. Import playbook web_server.yml in site.yml.
+36. Create web_server.yml to consume python_web_server role.
+37. Create python_web_server role files.
+
