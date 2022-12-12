@@ -1,1 +1,2 @@
 hostname: db-dev
+role: db_server
