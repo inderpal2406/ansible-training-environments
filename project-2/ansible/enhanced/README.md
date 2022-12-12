@@ -122,4 +122,11 @@ Changes on 7 Dec, 2022: Migration from CG laptop to RSA workspace.
 35. Import playbook web_server.yml in site.yml.
 36. Create web_server.yml to consume python_web_server role.
 37. Create python_web_server role files.
+38. Linux packages & python packages being installed in python_web_server role, got installed without issues for first time.
+39. From second time, we started getting error as "Unable to correct problems, you have held broken packages".
+40. We referred the website: https://itsfoss.com/held-broken-packages-error/
+41. We modified the playbook to uninstall the packages. Executed it.
+42. Then we bumped up the version of python package from 3.10 to 3.11.
+43. Modifed the playbook to install the packages. Executed it.
+44. Re-executed the same playbook and no errors were faced this time for broken packages.
 
