@@ -129,4 +129,5 @@ Changes on 7 Dec, 2022: Migration from CG laptop to RSA workspace.
 42. Then we bumped up the version of python package from 3.10 to 3.11.
 43. Modifed the playbook to install the packages. Executed it.
 44. Re-executed the same playbook and no errors were faced this time for broken packages.
+45. Add vars for web-dev & db-dev in host_vars dir. Var added is role. This is done as we couldn't set ansible facts for these 2 systems.
 
