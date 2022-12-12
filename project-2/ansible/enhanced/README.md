@@ -130,4 +130,27 @@ Changes on 7 Dec, 2022: Migration from CG laptop to RSA workspace.
 43. Modifed the playbook to install the packages. Executed it.
 44. Re-executed the same playbook and no errors were faced this time for broken packages.
 45. Add vars for web-dev & db-dev in host_vars dir. Var added is role. This is done as we couldn't set ansible facts for these 2 systems.
+46. Add configure_app.yml in site.yml.
+47. Create configure_app.yml to consume the python_web_app role.
+48. Create the python_web_app role.
+49. We use the ansible module named mysql_db to create mysql db.
+50. We specified login_host as localhost, login_user as root and login_password as root user password along with other parameters to create the DB.
+51. It failed saying PyMySQL dependency is required.
+52. We added task in tasks/main.yml of python_web_app role, to install PyMySQL package. This resolved the error.
+53. Next error we faced was "unable to find /root/.my.cnf".
+54. We specified login_host as "localhost" because the ansible module gets executed on db host and from there the connection would be for localhost.
+55. When localhost is mentioned as login_host, the mysql_db module will look for the login_unix_socket file and won't consider the login_user & login_password parameters.
+56. When it looks for mysql socket file, it'll search for credentials to connect in $HOME/.my.cnf file.
+57. Since, we specified become as true in configure_app.yml, $HOME will become /root.
+58. So, we created 2 variables in db-dev file of host_vars dir to hold values of db user & password to connect to mysql instance to create the DB.
+59. We created a template file for .my.cnf file and substituted those vars in this file.
+60. And the DB got created.
+61. We deleted non-useful parameters from mysql_db module in the role.
+62. The login_host: "localhost" parameter was also deleted as when we specify login_unix_socket parameter, the login host will be default be considered as localhost.
+63. Online URL to this useful information about mysql_db ansible module: https://stackoverflow.com/questions/44614863/ansible-unable-to-find-my-cnf-cant-connect-to-local-mysql-server
+64. We specified the mysql credentials in host_vars/db-dev file to connect to mysql instance in mysql_db module.
+65. This is security risk, as we mentioned the credentials in plain text files.
+66. This can be avoided by adopting different solutions as mentioned on: https://www.redhat.com/sysadmin/ansible-playbooks-secrets
+67. We used the vars_prompt method in configure_app.yml.
+68. It works and when we enter the credentials at the prompt, these are not visible on the acreen just like unix password prompt.
 
