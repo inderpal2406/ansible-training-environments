@@ -1,0 +1,8 @@
+---
+- name: "Ensure the python web app is deployed and configured with required resources."
+  hosts: "db-dev"
+  gather_facts: false
+  become: true
+  roles:
+    - { role: "python_web_app" }
+
