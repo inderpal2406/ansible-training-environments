@@ -1,0 +1,19 @@
+---
+- name: "Ensure python packages needed for mysql ansible modules are installed."
+  ansible.builtin.yum:
+    name: "python3-PyMySQL-0.10.1"
+    state: "present"
+
+- name: "Ensure ~/.my.cnf is present with correct credentials to connect to mysql instance."
+  ansible.builtin.template:
+    src: "my.cnf.j2"
+    dest: "/root/.my.cnf" # Since, become is true in configure_app.yml, hence $HOME will become /root dir.
+    mode: "0600"
+
+- name: "Ensure employee_db database is created."
+  mysql_db:
+    login_port: 3306
+    login_unix_socket: "/var/lib/mysql/mysql.sock"
+    name: "employee_db"
+    state: "present"
+
