@@ -10,10 +10,23 @@
     dest: "/root/.my.cnf" # Since, become is true in configure_app.yml, hence $HOME will become /root dir.
     mode: "0600"
 
-- name: "Ensure employee_db database is created."
+- name: "Ensure employee_db database is present."
   mysql_db:
     login_port: 3306
     login_unix_socket: "/var/lib/mysql/mysql.sock"
     name: "employee_db"
+    state: "present"
+
+- name: "Ensure db_user user is present."
+  mysql_user:
+    login_port: 3306
+    login_unix_socket: "/var/lib/mysql/mysql.sock"
+    #name: "db_user@web-dev" # This created a user as db_user@web-dev. @web-dev was included in the name of user.
+    #name: 'db_user'@'web-dev'  # This gives error in yaml saying quoate at beginning and end should be same.
+    #name: "'db_user'@'web-dev'" # This created a user as 'db_user'@'web-dev', @'web-dev' was included in username.
+    name: "db_user"
+    host: "web-dev"  # We discovered in module docs that this host key is available. This will ensure db_user is able to login from web-dev only.
+    password: "{{ mysql_db_user_password }}"
+    priv: "employee_db.*:ALL"
     state: "present"
 
