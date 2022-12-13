@@ -1,6 +1,6 @@
 ---
 - name: "Ensure the python web app is deployed and configured with required resources."
-  hosts: "db-dev"
+  hosts: "db-dev web-dev"
   gather_facts: false
   become: true
   vars_prompt:
