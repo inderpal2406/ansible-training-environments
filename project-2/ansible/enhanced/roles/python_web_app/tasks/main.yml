@@ -3,12 +3,14 @@
   ansible.builtin.yum:
     name: "python3-PyMySQL-0.10.1"
     state: "present"
+  when: role == "db_server"
 
 - name: "Ensure ~/.my.cnf is present with correct credentials to connect to mysql instance."
   ansible.builtin.template:
     src: "my.cnf.j2"
     dest: "/root/.my.cnf" # Since, become is true in configure_app.yml, hence $HOME will become /root dir.
     mode: "0600"
+  when: role == "db_server"
 
 - name: "Ensure employee_db database is present."
   mysql_db:
@@ -16,6 +18,7 @@
     login_unix_socket: "/var/lib/mysql/mysql.sock"
     name: "employee_db"
     state: "present"
+  when: role == "db_server"
 
 - name: "Ensure db_user user is present."
   mysql_user:
@@ -29,6 +32,7 @@
     password: "{{ mysql_db_user_password }}"
     priv: "employee_db.*:ALL"
     state: "present"
+  when: role == "db_server"
 
 # Post this, the table employees in employee_db DB was created manually with name column of varchar(20) type.
 # A value/record 'john' was inserted into this table.
