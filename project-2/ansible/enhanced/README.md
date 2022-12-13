@@ -153,4 +153,5 @@ Changes on 7 Dec, 2022: Migration from CG laptop to RSA workspace.
 66. This can be avoided by adopting different solutions as mentioned on: https://www.redhat.com/sysadmin/ansible-playbooks-secrets
 67. We used the vars_prompt method in configure_app.yml.
 68. It works and when we enter the credentials at the prompt, these are not visible on the acreen just like unix password prompt.
-
+69. Now tasks/main.yml is updated to create DB employee_db and user db_user using mysql_db & mysql_user modules respectively.
+70. 
