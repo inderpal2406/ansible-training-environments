@@ -8,6 +8,8 @@
       prompt: "Enter the root user name for the MySQL instance"
     - name: "mysql_root_user_password"
       prompt: "Enter the root user password for the MySQL instance"
+    - name: "mysql_db_user_password"
+      prompt: "Enter the password to be set for db_user user"
   roles:
     - { role: "python_web_app", db_root_user: "{{ mysql_root_user }}", db_root_user_password: "{{ mysql_root_user_password }}" }
 
