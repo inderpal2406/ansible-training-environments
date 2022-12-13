@@ -30,3 +30,6 @@
     priv: "employee_db.*:ALL"
     state: "present"
 
+# Post this, the table employees in employee_db DB was created manually with name column of varchar(20) type.
+# A value/record 'john' was inserted into this table.
+
