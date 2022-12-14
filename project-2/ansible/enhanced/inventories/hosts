@@ -3,11 +3,13 @@ pubjump
 squid-proxy
 pvtjump
 web-dev
+web-test
 
 [redhat]
 pubans
 pvtans
 db-dev
+db-test
 
 [pubhosts]
 pubjump
@@ -19,6 +21,8 @@ pvtjump
 pvtans
 web-dev
 db-dev
+web-test
+db-test
 
 [pubcontroller]
 pubans
@@ -30,7 +34,19 @@ pvtans
 pubans
 pvtans
 
+[web]
+web-dev
+web-test
+
+[db]
+db-dev
+db-test
+
 [dev]
 web-dev
 db-dev
+
+[test]
+web-test
+db-test
 
