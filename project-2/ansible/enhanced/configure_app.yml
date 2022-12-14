@@ -11,5 +11,5 @@
     - name: "mysql_db_user_password"
       prompt: "Enter the password to be set for db_user user"
   roles:
-    - { role: "python_web_app", db_root_user: "{{ mysql_root_user }}", db_root_user_password: "{{ mysql_root_user_password }}" }
+    - { role: "python_web_app", db_root_user: "{{ mysql_root_user }}", db_root_user_password: "{{ mysql_root_user_password }}", db_user_password: "{{ mysql_db_user_password }}" }
 
