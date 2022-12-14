@@ -1,2 +1,6 @@
 ---
-# handlers file for python_web_app
+- name: "Restart flask.service"
+  ansible.builtin.service:
+    name: "flask.service"
+    state: "restarted"
+
