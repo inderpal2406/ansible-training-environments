@@ -1,0 +1,9 @@
+[Unit]
+Description=Flask service to run python app.
+
+[Service]
+ExecStart=/app/flask_run.sh
+
+[Install]
+WantedBy=multi-user.target
+

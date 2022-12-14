@@ -1,0 +1,10 @@
+#!/bin/bash
+
+# Flask settings.
+export FLASK_APP=/app/app.py
+export FLASK_DEBUG=0
+
+# Run flask app.
+#flask run --host=web-dev --port=80 & # commented as background processes terminate once script completes.
+flask run --host={{ hostname }} --port=80
+
