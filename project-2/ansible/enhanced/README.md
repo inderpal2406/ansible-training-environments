@@ -161,4 +161,12 @@ Changes on 7 Dec, 2022: Migration from CG laptop to RSA workspace.
 74. Add web_server var in host_vars file of db-dev. This will be used while creating db_user.
 75. Add db_server var in host_vars file of web-dev. This will be updated in app.py.
 76. Add tasks, handlers, templates, files for web-dev related tasks in python_web_app role.
+77. Created test env instances using terraform.
+78. Update ansible.cfg to use initial_hosts inventory.
+79. Update group_vars/all file to include new test env hosts in host var to include in hosts file on each host.
+80. Run pubans_hosts_file.yml to update hosts file on pubans server.
+81. Revert changes in ansible.cfg to rveert back to original hosts inventory.
+82. Update hosts inventory to include new test env hosts and add new groups for them.
+83. Execute 00_ssh_hosts.sh bash script to ssh to new hosts for first time to accept the key.
+84. Execute playbooks/operation_playbooks/00_ping.yml to test ansible connectivity to new hosts.
 
