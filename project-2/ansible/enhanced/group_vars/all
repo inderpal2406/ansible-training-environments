@@ -22,6 +22,8 @@ hosts_file_entries: |
   10.0.1.5 pvtans
   10.0.2.4 web-dev
   10.0.2.5 db-dev
+  10.0.3.4 web-test
+  10.0.3.5 db-test
 
 ansible_user: ansible
 
