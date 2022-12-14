@@ -1,4 +1,6 @@
 ---
+# DB server tasks.
+
 - name: "Ensure python packages needed for mysql ansible modules are installed."
   ansible.builtin.yum:
     name: "python3-PyMySQL-0.10.1"
@@ -28,12 +30,50 @@
     #name: 'db_user'@'web-dev'  # This gives error in yaml saying quoate at beginning and end should be same.
     #name: "'db_user'@'web-dev'" # This created a user as 'db_user'@'web-dev', @'web-dev' was included in username.
     name: "db_user"
-    host: "web-dev"  # We discovered in module docs that this host key is available. This will ensure db_user is able to login from web-dev only.
-    password: "{{ mysql_db_user_password }}"
+    host: "{{ web_server }}"  # We discovered in module docs that this host key is available. This will ensure db_user is able to login from web-dev only.
+    password: "{{ db_user_password }}"
     priv: "employee_db.*:ALL"
     state: "present"
   when: role == "db_server"
 
 # Post this, the table employees in employee_db DB was created manually with name column of varchar(20) type.
 # A value/record 'john' was inserted into this table.
+
+# Web server tasks.
+
+- name: "Ensure the directory to host app code is present."
+  ansible.builtin.file:
+    dest: "/app"
+    state: "directory"
+  when: role == "web_server"
+
+- name: "Ensure app.py is templated."
+  ansible.builtin.template:
+    src: "app.py.j2"
+    dest: "/app/app.py"
+  notify: "Restart flask.service"
+  when: role == "web_server"
+
+- name: "Ensure flask_run.sh is templated to run flask app as a service."
+  ansible.builtin.template:
+    src: "flask_run.sh.j2"
+    dest: "/app/flask_run.sh"
+    mode: "0755"
+  notify: "Restart flask.service"
+  when: role == "web_server"
+
+- name: "Ensure flask.service file exists on web server to run flask app as a service."
+  ansible.builtin.copy:
+    src: "flask.service"
+    dest: "/lib/systemd/system/flask.service"
+    mode: "0644"
+  notify: "Restart flask.service"
+  when: role == "web_server"
+
+- name: "Ensure flask.service is running and enabled to start in multi user env."
+  ansible.builtin.service:
+    name: "flask.service"
+    state: "started"
+    enabled: "yes"
+  when: role == "web_server"
 
