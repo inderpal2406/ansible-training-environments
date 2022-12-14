@@ -113,3 +113,23 @@ variable "db-dev-hostname" {
   type        = string
   description = "Hostname of db-dev host."
 }
+
+variable "web-test-pvt-ip" {
+  type        = string
+  description = "Private IP address of web-test host."
+}
+
+variable "web-test-hostname" {
+  type        = string
+  description = "Hostname of web-test host."
+}
+
+variable "db-test-pvt-ip" {
+  type        = string
+  description = "Private IP address of db-test host."
+}
+
+variable "db-test-hostname" {
+  type        = string
+  description = "Hostname of db-test host."
+}
