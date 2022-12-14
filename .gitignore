@@ -39,3 +39,7 @@ terraform.tfvars
 
 # Include network diagrams folder to provent from being committed in public repositories.
 **/network-diagrams/*
+
+# Include vault_password_file as it contains ansible-vault password.
+vault_password_file
+
