@@ -1,2 +1,3 @@
 hostname: db-dev
 role: db_server
+web_server: web-dev
