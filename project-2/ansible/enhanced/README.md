@@ -155,4 +155,10 @@ Changes on 7 Dec, 2022: Migration from CG laptop to RSA workspace.
 68. It works and when we enter the credentials at the prompt, these are not visible on the acreen just like unix password prompt.
 69. Now tasks/main.yml is updated to create DB employee_db and user db_user using mysql_db & mysql_user modules respectively.
 70. SSH to db-dev and connect as root user. Create employees table and insert a value into it.
+71. Add tasks related to app configuration on web-dev in the tasks/main.yml file of the python_web_app role.
+72. Use condition based on already set role var in host_var file of db-dev and web-dev, to differentiate between tasks of db-dev & web-dev in tasks/main.yml of python_web_app role.
+73. Add additional var prompt for password of db_use in configure_app.yml. This password will be set while creating this user and in app.py file.
+74. Add web_server var in host_vars file of db-dev. This will be used while creating db_user.
+75. Add db_server var in host_vars file of web-dev. This will be updated in app.py.
+76. Add tasks, handlers, templates, files for web-dev related tasks in python_web_app role.
 
