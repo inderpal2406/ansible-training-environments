@@ -1,0 +1,3 @@
+hostname: web-test
+role: web_server
+db_server: db-test
