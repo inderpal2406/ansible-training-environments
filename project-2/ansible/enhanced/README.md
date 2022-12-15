@@ -169,4 +169,16 @@ Changes on 7 Dec, 2022: Migration from CG laptop to RSA workspace.
 82. Update hosts inventory to include new test env hosts and add new groups for them.
 83. Execute 00_ssh_hosts.sh bash script to ssh to new hosts for first time to accept the key.
 84. Execute playbooks/operation_playbooks/00_ping.yml to test ansible connectivity to new hosts.
+85. Copy db-dev host var file to db-test and update var values in db-test. Same for web-test.
+86. Update all required playbooks from site.yml to execute required tasks against new hosts in test env.
+87. Only configure_app.yml is not updated for now.
+88. Executed site.yml which executed all playbooks agains test env servers, except configure_app.yml as new hosts were not added in it.
+89. As MySQL gets installed on db-test, run mysql_secure_installation on db-test as ansible user and setup db root user password.
+90. Decrypt vault secrets file and add test env secrets to it.
+91. Update configure_app.yml, by adding new play in it for test env servers using same python_web_app role but supplying test env secrets to it.
+92. Change play of dev env servers in configure_app.yml, and supply dev env secrets to it.
+93. Update python_web_app role files to use generic vars as db_root_user, db_root_user_password, db_user_password as different values for dev & test env would be supplied to these vars.
+94. Execute site.yml to execute configure_app.yml and configure app in test env.
+95. SSH to db-test, connect to mysql, create table in employee_db and add John record to it.
+96. SSH to web-test and curl web-test using different URLs.
 
