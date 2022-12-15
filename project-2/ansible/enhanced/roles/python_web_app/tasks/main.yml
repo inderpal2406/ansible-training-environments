@@ -31,7 +31,7 @@
     #name: "'db_user'@'web-dev'" # This created a user as 'db_user'@'web-dev', @'web-dev' was included in username.
     name: "db_user"
     host: "{{ web_server }}"  # We discovered in module docs that this host key is available. This will ensure db_user is able to login from web-dev only.
-    password: "{{ dev_db_user_password }}"
+    password: "{{ db_user_password }}"
     priv: "employee_db.*:ALL"
     state: "present"
   when: role == "db_server"
