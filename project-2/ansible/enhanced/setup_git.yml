@@ -1,15 +1,22 @@
 ---
-- name: "Ensure git is installed and git config for users is updated."
+- name: "Ensure git is installed and git config for devops+ansible users is updated on pubans & pvtans."
   hosts: "pubans pvtans"
   gather_facts: false
   become: true
   roles:
     - { role: "git", users: "{{ devops_users }} + {{ ansible_user_for_git }}" } 
 
-- name: "Ensure git is installed and git config for users is updated."
+- name: "Ensure git is installed and git config for dev users is updated on dev env servers."
   hosts: "dev"
   gather_facts: false
   become: true
   roles:
     - { role: "git", users: "{{ dev_users }}" }
+
+- name: "Ensure git is installed and git config for testing users is updated on test env servers to run automated tests."
+  hosts: "test"
+  gather_facts: false
+  become: true
+  roles:
+    - { role: "git", users: "{{ test_users }}" }
 

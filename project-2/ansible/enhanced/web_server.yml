@@ -1,6 +1,6 @@
 ---
 - name: "Ensure web server is configured."
-  hosts: "web-dev"
+  hosts: "web"
   gather_facts: false
   become: true
   roles:

@@ -1,5 +1,5 @@
 ---
-- name: "Ensure the python web app is deployed and configured with required resources."
+- name: "Ensure the python web app is deployed and configured in dev environment."
   hosts: "db-dev web-dev"
   gather_facts: false
   become: true
@@ -12,5 +12,14 @@
 #      prompt: "Enter the password to be set for db_user user"
   roles:
 #    - { role: "python_web_app", db_root_user: "{{ mysql_root_user }}", db_root_user_password: "{{ mysql_root_user_password }}", db_user_password: "{{ mysql_db_user_password }}" }
-    - { role: "python_web_app" }
+#    - { role: "python_web_app" }  # This worked when we used db_root_user, db_root_user_password, db_user_password vars in vault secrets.
+# As, we need to supply different secrets for diff envs, we kept generic vars in python_web_app role files and supplied values to it as per the env from vault secrets file. Hence, it is as below now,
+    - { role: "python_web_app", db_root_user: "{{ dev_db_root_user }}", db_root_user_password: "{{ dev_db_root_user_password }}", db_user_password: "{{ dev_db_user_password }}" }
+
+- name: "Ensure the python web app is deployed and configured in test environment."
+  hosts: "db-test web-test"
+  gather_facts: false
+  become: true
+  roles:
+    - { role: "python_web_app", db_root_user: "{{ test_db_root_user }}", db_root_user_password: "{{ test_db_root_user_password }}", db_user_password: "{{ test_db_user_password }}" }
 
