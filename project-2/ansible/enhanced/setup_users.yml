@@ -21,8 +21,8 @@
   roles:
     - dev_users
 
-- name: "Ensure tester users are setup on test environment servers."
-  hosts: "test"
+- name: "Ensure tester users are setup on test & stg environment servers."
+  hosts: "test stg"
   gather_facts: false
   become: true
   roles:
