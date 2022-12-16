@@ -23,3 +23,10 @@
   roles:
     - { role: "python_web_app", db_root_user: "{{ test_db_root_user }}", db_root_user_password: "{{ test_db_root_user_password }}", db_user_password: "{{ test_db_user_password }}" }
 
+- name: "Ensure the python web app is deployed and configured in stg environment."
+  hosts: "db-stg web-stg"
+  gather_facts: false
+  become: true
+  roles:
+    - { role: "python_web_app", db_root_user: "{{ stg_db_root_user }}", db_root_user_password: "{{ stg_db_root_user_password }}", db_user_password: "{{ stg_db_user_password }}" }
+
