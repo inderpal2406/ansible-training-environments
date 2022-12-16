@@ -276,7 +276,8 @@ resource "aws_instance" "web-test" {
 
 resource "aws_instance" "db-test" {
   ami                         = data.aws_ami.redhat-ami-id.id
-  instance_type               = "t3.micro"  # RedHat flavor doesn't support t3.nano.
+  instance_type               = "t3.small"  # RedHat flavor doesn't support t3.nano. Maybe due to root storage disk of small capacity coming by default.
+  # With t3.micro offers 1 GB RAM which was falling short during ansible-playbook execution to install packages on db-test.
   key_name                    = aws_key_pair.main-vpc-pvtsub-03-1c-key.key_name
   subnet_id                   = aws_subnet.main-vpc-pvtsub-03-1c.id
   associate_public_ip_address = false
