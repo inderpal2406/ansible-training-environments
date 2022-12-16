@@ -1,0 +1,3 @@
+hostname: web-stg
+role: web_server
+db_server: db-stg
