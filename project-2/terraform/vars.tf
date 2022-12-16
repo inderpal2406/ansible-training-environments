@@ -135,21 +135,21 @@ variable "db-test-hostname" {
 }
 
 variable "web-stg-pvt-ip" {
-  type = string
+  type        = string
   description = "Private IP address of web-stg host."
 }
 
 variable "web-stg-hostname" {
-  type = string
+  type        = string
   description = "Hostname of web-stg host."
 }
 
 variable "db-stg-pvt-ip" {
-  type = string
+  type        = string
   description = "Private IP address of db-stg host."
 }
 
 variable "db-stg-hostname" {
-  type = string
+  type        = string
   description = "Hostname of db-stg host."
 }

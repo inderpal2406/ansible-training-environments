@@ -249,7 +249,7 @@ resource "aws_instance" "testans" {
 
 resource "aws_instance" "web-test" {
   ami                         = data.aws_ami.ubuntu-ami-id.id
-  instance_type               = "t3.nano"  # Availability zone 1c in ap-south-1 reions doesn't support t2 instance family.
+  instance_type               = "t3.nano" # Availability zone 1c in ap-south-1 reions doesn't support t2 instance family.
   key_name                    = aws_key_pair.main-vpc-pvtsub-03-1c-key.key_name
   subnet_id                   = aws_subnet.main-vpc-pvtsub-03-1c.id
   associate_public_ip_address = false
@@ -275,8 +275,8 @@ resource "aws_instance" "web-test" {
 # Redhat database server in test environment.
 
 resource "aws_instance" "db-test" {
-  ami                         = data.aws_ami.redhat-ami-id.id
-  instance_type               = "t3.small"  # RedHat flavor doesn't support t3.nano. Maybe due to root storage disk of small capacity coming by default.
+  ami           = data.aws_ami.redhat-ami-id.id
+  instance_type = "t3.small" # RedHat flavor doesn't support t3.nano. Maybe due to root storage disk of small capacity coming by default.
   # With t3.micro offers 1 GB RAM which was falling short during ansible-playbook execution to install packages on db-test.
   key_name                    = aws_key_pair.main-vpc-pvtsub-03-1c-key.key_name
   subnet_id                   = aws_subnet.main-vpc-pvtsub-03-1c.id
@@ -291,6 +291,60 @@ resource "aws_instance" "db-test" {
   }
   tags = {
     Name      = var.db-test-hostname
+    Env       = "Test"
+    App       = "DB Server"
+    Terraform = "True"
+    Owner     = "Vikram Singh"
+  }
+  #user_data = templatefile("template-files\\pvtans-ansible-pre-requisites.sh.tftpl", { pvtans_ansible_pub_key = var.pvtans-ansible-pub-key })
+  user_data = templatefile("template-files\\pubans-ansible-pre-requisites.sh.tftpl", { pubans_ansible_pub_key = var.pubans-ansible-pub-key })
+}
+
+# Ubuntu web server in stg environment.
+
+resource "aws_instance" "web-stg" {
+  ami                         = data.aws_ami.ubuntu-ami-id.id
+  instance_type               = "t3.nano" # Availability zone 1c in ap-south-1 reions doesn't support t2 instance family.
+  key_name                    = aws_key_pair.main-vpc-pvtsub-04-1c-key.key_name
+  subnet_id                   = aws_subnet.main-vpc-pvtsub-04-1c.id
+  associate_public_ip_address = false
+  #vpc_security_group_ids      = [aws_security_group.allow-pvtjump-ssh.id, aws_security_group.allow-pvtans-ssh.id, aws_security_group.dev-sg.id]
+  vpc_security_group_ids = [aws_security_group.allow-pvtjump-ssh.id, aws_security_group.allow-pubans-ssh.id, aws_security_group.stg-sg.id]
+  private_ip             = var.web-stg-pvt-ip
+  tenancy                = "default"
+  metadata_options {
+    http_endpoint = "enabled"
+    http_tokens   = "required"
+  }
+  tags = {
+    Name      = var.web-stg-hostname
+    Env       = "Stg"
+    App       = "Web Server"
+    Terraform = "True"
+    Owner     = "Vikram Singh"
+  }
+  #user_data = templatefile("template-files\\pvtans-ansible-pre-requisites.sh.tftpl", { pvtans_ansible_pub_key = var.pvtans-ansible-pub-key })
+  user_data = templatefile("template-files\\pubans-ansible-pre-requisites.sh.tftpl", { pubans_ansible_pub_key = var.pubans-ansible-pub-key })
+}
+
+# Redhat database server in stg environment.
+
+resource "aws_instance" "db-stg" {
+  ami                         = data.aws_ami.redhat-ami-id.id
+  instance_type               = "t3.small"
+  key_name                    = aws_key_pair.main-vpc-pvtsub-04-1c-key.key_name
+  subnet_id                   = aws_subnet.main-vpc-pvtsub-04-1c.id
+  associate_public_ip_address = false
+  #vpc_security_group_ids      = [aws_security_group.allow-pvtjump-ssh.id, aws_security_group.allow-pvtans-ssh.id, aws_security_group.dev-sg.id]
+  vpc_security_group_ids = [aws_security_group.allow-pvtjump-ssh.id, aws_security_group.allow-pubans-ssh.id, aws_security_group.stg-sg.id]
+  private_ip             = var.db-stg-pvt-ip
+  tenancy                = "default"
+  metadata_options {
+    http_endpoint = "enabled"
+    http_tokens   = "required"
+  }
+  tags = {
+    Name      = var.db-stg-hostname
     Env       = "Test"
     App       = "DB Server"
     Terraform = "True"
