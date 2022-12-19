@@ -45,6 +45,26 @@ resource "aws_instance" "pubjump" {
     private_key = file("ssh-keys\\main-vpc-pubsub-01-1a-key")
     host        = aws_instance.pubjump.public_ip
   }
+  # As we migrated from CG Laptop to AWS workspace to perform terraform functions.
+  # Because laptop had restrictions due to recent updates, & we wanted to do everything from one place.
+  # Workspace being behind proxy, provisioner didn't work as connection on SSH port didn't work through proxy.
+  # Though pubjump got created with errors, with every terraform apply, terraform wanted to replace it,
+  # as it was marked as tainted in terraform state.
+  # We though, including lifecycle block to ignore changes would help, but it didn't. Still terraform asked to replace in plan.
+  # Lifecycle would have worked if resource would have got created without errors & wasn't marked as tainted.
+  # Then lifecycle would have ignored further changes to attributes. So, we commented lifecycle block, as it is not needed.
+  /*
+  lifecycle {
+    ignore_changes = all  # Will ignore changes for all attributes.
+    # Alternately, if we want to ignore changes for only specific attributes, then we can specify list of those.
+#    ignore_changes = [
+#      tags
+#    ]
+  }
+  */
+  # To overcome problem of recreating/replacing pubjump everytime we run terraform plan, we 
+  # used terraform untaint command to untaint pubjump in terraform state file.
+  # Now terraform didn't prompt to replace it (during plan) as it is not tainted in terraform state.
 }
 
 # Ansible server on Redhat in public subnet.
