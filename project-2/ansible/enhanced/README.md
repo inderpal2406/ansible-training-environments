@@ -181,4 +181,6 @@ Changes on 7 Dec, 2022: Migration from CG laptop to RSA workspace.
 94. Execute site.yml to execute configure_app.yml and configure app in test env.
 95. SSH to db-test, connect to mysql, create table in employee_db and add John record to it.
 96. SSH to web-test and curl web-test using different URLs.
+97. Create stg env servers.
+98. Repeat all above steps done for test env new servers for stg env servers.
 
