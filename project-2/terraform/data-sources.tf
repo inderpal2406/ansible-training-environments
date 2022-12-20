@@ -17,10 +17,25 @@ data "aws_ami" "ubuntu-ami-id" {
 
 data "aws_ami" "redhat-ami-id" {
   most_recent = true
-  owners      = ["309956199498"] # Redhat
+  owners      = ["309956199498"] # Redhat (not sure)
   filter {
     name   = "name"
     values = ["RHEL-8.6.0_HVM-20220503-x86_64-2-Hourly2-GP2"]
+  }
+  filter {
+    name   = "virtualization-type"
+    values = ["hvm"]
+  }
+}
+
+# Data source to get Microsoft Windows AMI ID (ami-0de07eb85c12b8dbb) in ap-south-1 region.
+
+data "aws_ami" "windows-ami-id" {
+  most_recent = true
+  owners      = ["801119661308"]
+  filter {
+    name   = "name"
+    values = ["Windows_Server-2022-English-Full-Base-2022.12.14"]
   }
   filter {
     name   = "virtualization-type"
