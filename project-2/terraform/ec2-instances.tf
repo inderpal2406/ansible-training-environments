@@ -123,6 +123,29 @@ resource "aws_instance" "squid-proxy" {
   user_data = templatefile("template-files\\pubans-ansible-pre-requisites.sh.tftpl", { pubans_ansible_pub_key = var.pubans-ansible-pub-key })
 }
 
+resource "aws_instance" "win-pubjump" {
+  ami                         = data.aws_ami.windows-ami-id.id
+  instance_type               = "t2.micro"
+  key_name                    = aws_key_pair.main-vpc-pubsub-01-1a-key.key_name
+  subnet_id                   = aws_subnet.main-vpc-pubsub-01-1a.id
+  associate_public_ip_address = true
+  vpc_security_group_ids      = [aws_security_group.allow-public-rdp.id, aws_security_group.allow-pubans-winrm.id]
+  private_ip                  = var.win-pubjump-pvt-ip
+  tenancy                     = "default"
+  metadata_options {
+    http_endpoint = "enabled"
+    http_tokens   = "required"
+  }
+  tags = {
+    Name      = var.win-pubjump-hostname
+    Env       = "Management"
+    App       = "Jump Server"
+    Terraform = "True"
+    Owner     = "Vikram Singh"
+  }
+  #user_data = placeholder
+}
+
 # Ubuntu jump server in private subnet.
 
 resource "aws_instance" "pvtjump" {
