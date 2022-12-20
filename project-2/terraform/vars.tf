@@ -153,3 +153,13 @@ variable "db-stg-hostname" {
   type        = string
   description = "Hostname of db-stg host."
 }
+
+variable "win-pubjump-pvt-ip" {
+  type        = string
+  description = "Private IP address of win-pubjump host."
+}
+
+variable "win-pubjump-hostname" {
+  type        = string
+  description = "Hostname of win-pubjump host."
+}
