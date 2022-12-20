@@ -33,6 +33,34 @@ resource "aws_security_group" "allow-public-ssh" {
   }
 }
 
+# Security group to allow RDP traffic from public internet.
+
+resource "aws_security_group" "allow-public-rdp" {
+  name        = "allow-public-rdp"
+  description = "Allow RDP traffic from public internet."
+  vpc_id      = aws_vpc.main-vpc.id
+  ingress {
+    description = "Allow incoming RDP traffic from anywhere on public internet."
+    from_port   = 3389
+    to_port     = 3389
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+  egress {
+    description = "Allow all outgoing traffic."
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+  tags = {
+    Name      = "allow-public-rdp"
+    Env       = "Management"
+    Terraform = "True"
+    Owner     = "Vikram Singh"
+  }
+}
+
 # Security group to allow SSH traffic from pubjump host.
 
 resource "aws_security_group" "allow-pubjump-ssh" {
@@ -114,6 +142,34 @@ resource "aws_security_group" "allow-pubans-ssh" {
   }
   tags = {
     Name      = "allow-pubans-ssh"
+    Env       = "Management"
+    Terraform = "True"
+    Owner     = "Vikram Singh"
+  }
+}
+
+# Security group to allow WinRM traffic from pubans host.
+
+resource "aws_security_group" "allow-pubans-winrm" {
+  name        = "allow-pubans-winrm"
+  description = "Allow WinRM traffic from pubans host."
+  vpc_id      = aws_vpc.main-vpc.id
+  ingress {
+    description = "Allow incoming WinRM traffic from pubans host."
+    from_port   = 5985
+    to_port     = 5986
+    protocol    = "tcp"
+    cidr_blocks = ["${var.pubans-pvt-ip}/32"]
+  }
+  egress {
+    description = "Allow all outgoing traffic."
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+  tags = {
+    Name      = "allow-pubans-winrm"
     Env       = "Management"
     Terraform = "True"
     Owner     = "Vikram Singh"
